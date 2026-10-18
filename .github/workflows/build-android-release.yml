@@ -173,14 +173,37 @@ jobs:
           path.write_text(text)
           PY
 
+      - name: Validasi preset Android sebelum ekspor
+        working-directory: games/lorong-sunyi
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          config = Path("export_presets.cfg").read_text()
+          android = re.search(r"(?ms)^\[preset\.1\]\n(.*?)(?=^\[preset\.\d+\]|\Z)", config)
+          options = re.search(r"(?ms)^\[preset\.1\.options\]\n(.*?)(?=^\[preset\.\d+\]|\Z)", config)
+          if not android or 'platform="Android"' not in android.group(1):
+              raise SystemExit("Preset Android Release tidak ditemukan atau platform-nya salah.")
+          settings = options.group(1) if options else ""
+          if re.search(r"(?m)^gradle_build/(?:min_sdk|target_sdk)=", settings):
+              raise SystemExit("Min SDK/Target SDK override tidak boleh disetel saat Use Gradle Build dinonaktifkan.")
+          project = Path("project.godot").read_text()
+          if not re.search(r'(?m)^textures/vram_compression/import_etc2_astc=true$', project):
+              raise SystemExit("Project Settings textures/vram_compression/import_etc2_astc harus aktif untuk ekspor Android.")
+          print("Preset Android dan ETC2/ASTC tervalidasi.")
+          PY
+
       - name: Ekspor APK dengan preset Android Release
         working-directory: games/lorong-sunyi
         run: |
           set -euo pipefail
           mkdir -p build/android
-          godot --headless --path . --export-release "Android Release" "$GITHUB_WORKSPACE/games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
-          test -s build/android/Lorong-Sunyi-release.apk
-          "$ANDROID_SDK_ROOT/build-tools/35.0.1/apksigner" verify --verbose build/android/Lorong-Sunyi-release.apk
+          apk="$GITHUB_WORKSPACE/games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
+          godot --headless --path . --export-release "Android Release" "$apk"
+          test -s "$apk"
+          "$ANDROID_SDK_ROOT/build-tools/35.0.1/apksigner" verify --verbose "$apk"
 
       - name: Unggah APK sebagai artifact workflow
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
