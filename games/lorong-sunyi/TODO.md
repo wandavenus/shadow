@@ -25,4 +25,4 @@
 
 - [x] Integrasikan aset yang dibutuhkan ke scene; pertahankan provenance dan fakta lisensi katalog.
 - [x] Ganti identitas, splash/loading screen, artwork sharing, dan favicon bawaan agar konsisten dengan Lorong Sunyi.
-- [ ] Simpan source proyek ke repo GitHub `wandavenus/shadow` di subfolder `games/lorong-sunyi` tanpa menimpa README, lisensi, atau konten repo yang sudah ada.
+- [x] Simpan source proyek ke repo GitHub `wandavenus/shadow` di subfolder `games/lorong-sunyi` tanpa menimpa README, lisensi, atau konten repo yang sudah ada.

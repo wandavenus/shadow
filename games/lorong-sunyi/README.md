@@ -19,4 +19,4 @@ Area game dan UI dirancang untuk layar lanskap 16:9 dan memakai renderer GL Comp
 
 Sumber, peran, dan fakta lisensi aset dicatat di [ASSETS.md](ASSETS.md). Aset katalog yang tercatat dipakai mengikuti metadata lisensi terbitannya; game tidak menggunakan aset atau karakter Suikoden II.
 
-File media runtime disimpan di Manus-managed asset storage dan sengaja tidak disertakan dalam Git; `assets.lock.json`, provenance, dan sidecar import dipertahankan. Karena itu clone GitHub ini adalah mirror source, bukan paket standalone yang langsung dapat dijalankan tanpa memulihkan media dari proyek Manus terkait. Buka proyek Webdev yang sama untuk memakai/hydrate media dan menjalankan ekspor dari sana.
+Media runtime disimpan dalam penyimpanan aset terkelola Manus dan sengaja tidak disertakan di Git; `assets.lock.json`, provenance, dan sidecar impor dipertahankan. Karena itu clone GitHub ini adalah mirror source, bukan paket mandiri yang langsung dapat dijalankan tanpa memulihkan media dari proyek Manus terkait. Buka proyek Webdev yang sama untuk menyinkronkan media dan menjalankan ekspor dari sana.
