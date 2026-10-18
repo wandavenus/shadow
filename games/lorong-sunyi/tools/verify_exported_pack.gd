@@ -46,7 +46,7 @@ func _verify() -> void:
 		_check(not main.has_method("_open_tuning"), "panel developer tidak boleh muncul di release")
 		main.call("_start_game")
 		await process_frame
-		_check(main.get_node_or_null("Room") != null, "pack harus memulai area permainan")
+		_check(main.get_node_or_null("RuangSunyi") != null, "pack harus memulai area permainan")
 		_check(main.get_node_or_null("HUD/TouchControls/InteractButton") is Button, "kontrol sentuh harus dikemas")
 		main.call("_return_to_title")
 		await process_frame

@@ -1,0 +1,237 @@
+name: Build APK Rilis Android — Lorong Sunyi
+
+on:
+  workflow_dispatch:
+    inputs:
+      accept_android_sdk_licenses:
+        description: Saya telah meninjau dan menyetujui lisensi Android SDK untuk run ini
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lorong-sunyi-android-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-apk:
+    name: Ekspor APK mode rilis
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GAME_DIR: games/lorong-sunyi
+      ACCEPT_ANDROID_SDK_LICENSES: ${{ inputs.accept_android_sdk_licenses }}
+      ANDROID_RELEASE_KEYSTORE_BASE64: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+      ANDROID_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
+      ANDROID_RELEASE_KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Pulihkan media runtime bila URL arsip disediakan
+        env:
+          LORONG_ASSETS_ARCHIVE_URL: ${{ secrets.LORONG_ASSETS_ARCHIVE_URL }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${LORONG_ASSETS_ARCHIVE_URL:-}" ]]; then
+            echo "Secret arsip media tidak disetel; workflow akan memeriksa media yang ada di checkout."
+            exit 0
+          fi
+          case "$LORONG_ASSETS_ARCHIVE_URL" in
+            https://*) ;;
+            *) echo "::error::LORONG_ASSETS_ARCHIVE_URL harus berupa URL HTTPS."; exit 1 ;;
+          esac
+          echo "::add-mask::$LORONG_ASSETS_ARCHIVE_URL"
+          archive="$RUNNER_TEMP/lorong-sunyi-assets.zip"
+          unpack="$RUNNER_TEMP/lorong-sunyi-assets"
+          curl --fail --silent --show-error --location --retry 3 --connect-timeout 30 --max-time 300 --max-filesize 104857600 --proto '=https' --proto-redir '=https' "$LORONG_ASSETS_ARCHIVE_URL" --output "$archive"
+          mkdir -p "$unpack"
+          python3 - "$archive" "$unpack" <<'PY'
+          import shutil
+          import stat
+          import sys
+          import zipfile
+          from pathlib import Path, PurePosixPath
+
+          archive_path, destination = map(Path, sys.argv[1:])
+          total_size = 0
+          with zipfile.ZipFile(archive_path) as bundle:
+              for item in bundle.infolist():
+                  name = PurePosixPath(item.filename)
+                  if (name.is_absolute() or "\\" in item.filename or ".." in name.parts
+                          or not name.parts or name.parts[0] != "assets"):
+                      raise SystemExit(f"Arsip hanya boleh berisi path assets/: {item.filename!r}")
+                  if stat.S_ISLNK(item.external_attr >> 16):
+                      raise SystemExit(f"Arsip tidak boleh berisi symbolic link: {item.filename!r}")
+                  total_size += item.file_size
+                  if total_size > 100 * 1024 * 1024:
+                      raise SystemExit("Ukuran hasil ekstraksi arsip melebihi batas 100 MiB.")
+              bundle.extractall(destination)
+          source_assets = destination / "assets"
+          if not source_assets.is_dir():
+              raise SystemExit("Arsip harus berisi folder assets/ pada level teratas.")
+          target_assets = Path("games/lorong-sunyi/assets")
+          target_assets.mkdir(parents=True, exist_ok=True)
+          shutil.copytree(source_assets, target_assets, dirs_exist_ok=True)
+          PY
+
+      - name: Periksa media yang wajib untuk game
+        run: |
+          set -euo pipefail
+          required=(
+            "assets/characters/catalog-kenney/PNG/Round (outline)/rabbit.png"
+            "assets/characters/empty-presence-512.png"
+            "assets/environment/lorong-empty-room-1280x720.png"
+            "assets/props/catalog-furniture/Untitled 17.png"
+            "assets/share/favicon.png"
+            "assets/share/lorong-title-1280x720.png"
+            "assets/template/fonts/Figtree-VF.subset.woff2"
+            "assets/template/fonts/NotoSansSC-VF.subset.woff2"
+            "assets/template/fonts/display/Sora-VF.subset.woff2"
+          )
+          missing=()
+          for item in "${required[@]}"; do
+            [[ -s "$GAME_DIR/$item" ]] || missing+=("$item")
+          done
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Media tidak ditemukan: %s\n' "${missing[@]}"
+            echo "::error title=Media runtime belum tersedia::Tambahkan media ke checkout atau set Actions secret LORONG_ASSETS_ARCHIVE_URL ke URL HTTPS arsip ZIP yang berisi folder assets/ lengkap. Lihat README game."
+            exit 1
+          fi
+
+      - name: Wajibkan persetujuan lisensi Android SDK
+        run: |
+          if [[ "$ACCEPT_ANDROID_SDK_LICENSES" != "true" ]]; then
+            echo "::error title=Persetujuan lisensi diperlukan::Jalankan ulang workflow dan centang input persetujuan lisensi Android SDK."
+            exit 1
+          fi
+
+      - name: Siapkan Java 17
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Siapkan Android SDK
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
+        with:
+          accept-android-sdk-licenses: ${{ inputs.accept_android_sdk_licenses }}
+          log-accepted-android-sdk-licenses: false
+          packages: >-
+            platform-tools
+            build-tools;35.0.1
+            platforms;android-35
+            cmdline-tools;latest
+            cmake;3.10.2.4988404
+            ndk;28.1.13356709
+
+      - name: Siapkan Godot dan template ekspor
+        uses: chickensoft-games/setup-godot@ac93246ea68518a384c1c280a496e5989341f2f6 # v2.4.3
+        with:
+          version: '4.7.2'
+          use-dotnet: false
+          include-templates: true
+
+      - name: Konfigurasikan jalur SDK untuk Godot
+        run: |
+          set -euo pipefail
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-$HOME/.android/sdk}}"
+          [[ -x "$sdk_root/platform-tools/adb" ]] || { echo "::error::Android SDK tidak ditemukan di $sdk_root"; exit 1; }
+          mkdir -p "$HOME/.config/godot"
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/java_sdk_path = "$JAVA_HOME"
+          export/android/android_sdk_path = "$sdk_root"
+          EOF
+          echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          godot --headless --version
+          java -version
+
+      - name: Siapkan signing key APK rilis
+        run: |
+          set -euo pipefail
+          keystore="$RUNNER_TEMP/lorong-sunyi-release.keystore"
+          base64_key="${ANDROID_RELEASE_KEYSTORE_BASE64:-}"
+          key_password="${ANDROID_RELEASE_KEYSTORE_PASSWORD:-}"
+          key_alias="${ANDROID_RELEASE_KEY_ALIAS:-}"
+          if [[ -n "$base64_key" || -n "$key_password" || -n "$key_alias" ]]; then
+            if [[ -z "$base64_key" || -z "$key_password" || -z "$key_alias" ]]; then
+              echo "::error::Untuk signing key tetap, set ketiga secret ANDROID_RELEASE_KEYSTORE_BASE64, ANDROID_RELEASE_KEYSTORE_PASSWORD, dan ANDROID_RELEASE_KEY_ALIAS."
+              exit 1
+            fi
+            echo "::add-mask::$base64_key"
+            echo "::add-mask::$key_password"
+            echo "::add-mask::$key_alias"
+            printf '%s' "$base64_key" | base64 --decode > "$keystore"
+            alias="$key_alias"
+            password="$key_password"
+            echo "Signing key tetap dipakai dari GitHub Actions secrets."
+          else
+            alias="lorong-sunyi"
+            password="$(openssl rand -hex 24)"
+            keytool -genkeypair -noprompt \
+              -keystore "$keystore" \
+              -alias "$alias" \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "$password" -keypass "$password" \
+              -dname "CN=Lorong Sunyi, OU=GitHub Actions, O=wandavenus, C=ID"
+            echo "::notice title=Signing key sementara::Build ini memakai signing key sementara. Untuk memasang build berikutnya sebagai pembaruan, tambahkan tiga secret signing key yang dijelaskan di README; jika tidak, hapus instalasi lama terlebih dahulu."
+          fi
+          {
+            echo "GODOT_ANDROID_KEYSTORE_RELEASE_PATH=$keystore"
+            echo "GODOT_ANDROID_KEYSTORE_RELEASE_USER=$alias"
+            echo "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=$password"
+          } >> "$GITHUB_ENV"
+
+      - name: Impor resource dan jalankan pemeriksaan Godot
+        working-directory: games/lorong-sunyi
+        run: |
+          set -euo pipefail
+          godot --headless --editor --path . --quit
+
+      - name: Tetapkan versi build yang meningkat per run
+        working-directory: games/lorong-sunyi
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          path = Path("export_presets.cfg")
+          text = path.read_text()
+          run_number = os.environ["GITHUB_RUN_NUMBER"]
+          text, code_count = re.subn(r"(?m)^version/code=\d+$", f"version/code={run_number}", text)
+          text, name_count = re.subn(r'(?m)^version/name="[^"]*"$', f'version/name="1.0.{run_number}"', text)
+          if code_count != 1 or name_count != 1:
+              raise SystemExit("Tidak dapat menetapkan version code/name pada preset Android Release.")
+          path.write_text(text)
+          PY
+
+      - name: Ekspor APK dengan preset Android Release
+        working-directory: games/lorong-sunyi
+        run: |
+          set -euo pipefail
+          mkdir -p build/android
+          godot --headless --path . --export-release "Android Release" "$GITHUB_WORKSPACE/games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
+          test -s build/android/Lorong-Sunyi-release.apk
+          "$ANDROID_SDK_ROOT/build-tools/35.0.1/apksigner" verify --verbose build/android/Lorong-Sunyi-release.apk
+
+      - name: Unggah APK sebagai artifact workflow
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Lorong-Sunyi-APK-Rilis
+          path: games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk
+          if-no-files-found: error

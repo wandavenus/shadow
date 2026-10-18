@@ -1,5 +1,6 @@
 .godot/
 dist/
+build/
 node_modules/
 .manus-logs/
 # --- injected at scaffold time (see gitignore.project in the template) ---
