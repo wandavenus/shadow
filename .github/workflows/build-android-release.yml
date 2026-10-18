@@ -229,5 +229,6 @@ jobs:
           tag="lorong-sunyi-v1.0.${GITHUB_RUN_NUMBER}"
           apk="games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
           gh release create "$tag" "$apk" \
+            --draft \
             --title "Lorong Sunyi v1.0.${GITHUB_RUN_NUMBER}" \
             --notes "APK rilis otomatis dari commit ${GITHUB_SHA} pada branch ${GITHUB_REF_NAME}."
