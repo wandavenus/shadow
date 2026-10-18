@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "title": "Lorong Sunyi",
+  "description": "Temani Mika, kelinci kecil, menyelidiki kamar yang berubah. Periksa benda, rangkai petunjuk, dan bersembunyi dari Kehadiran.",
+  "defaultCaptions": {
+    "x": "Mika terjebak di kamar yang terus berubah. Mampukah ia menemukan jalan keluar? — Lorong Sunyi",
+    "facebook": "Jelajahi kamar sunyi, periksa benda-benda di dalamnya, dan hindari sesuatu yang mengubah ruang. Coba prototipe Lorong Sunyi.",
+    "reddit": "Saya membuat prototipe horor psikologis 2.5D tentang kelinci kecil yang menyelidiki kamar yang berubah: Lorong Sunyi.",
+    "discord": "Ada sesuatu di balik pintu. Temani Mika menyelidiki Lorong Sunyi."
+  },
+  "assets": {
+    "og": "assets/share/lorong-sunyi-og-1200x630.png",
+    "favicon": "assets/share/favicon.png"
+  }
+}

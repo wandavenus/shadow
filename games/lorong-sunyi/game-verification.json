@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "checks": [
+    {
+      "kind": "scene",
+      "path": "res://test/test_suite.tscn",
+      "expect": "[lorong-sunyi-tests] PASS:",
+      "profile": "source"
+    },
+    {
+      "kind": "script",
+      "path": "res://tools/verify_exported_pack.gd",
+      "expect": "[lorong-sunyi-pack] PASS:",
+      "profile": "pack"
+    }
+  ]
+}

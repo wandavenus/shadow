@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "archiveSha256": "0bc2c14992bc5156dcb0af06d61553c68a0fc3ec6ff6aa9781f9ed1b7120b8a9",
+  "archiveSizeBytes": 2607374,
+  "members": [
+    {
+      "member": "PNG/Round (outline)/rabbit.png",
+      "sha256": "61a429490f6dbeea65f8e1b37b884d1aff61271ebe34bbc2c837f974aeaf0adf",
+      "sizeBytes": 9004
+    }
+  ],
+  "dependencyCoverage": "glb-gltf-obj-mtl-textureatlas-bmfont-tiled",
+  "limitations": [],
+  "catalogSources": [
+    {
+      "snapshotId": "catalog-20260924-japan-characters-scene-removal-v1",
+      "catalogPath": "2d-sprites/characters/kenney-animal-pack/assets.zip"
+    }
+  ],
+  "catalogMetadata": [
+    {
+      "snapshotId": "catalog-20260924-japan-characters-scene-removal-v1",
+      "catalogPath": "2d-sprites/characters/kenney-animal-pack/assets.zip",
+      "metadataPath": "2d-sprites/characters/kenney-animal-pack/metadata.json",
+      "metadataSha256": "cf334fd5df300460564d249f75cb2a41420ce537b6bac0d630c977b9ceffe507",
+      "archiveSha256": "0bc2c14992bc5156dcb0af06d61553c68a0fc3ec6ff6aa9781f9ed1b7120b8a9",
+      "source": {
+        "packId": "kenney-animal-pack",
+        "name": "Animal Pack",
+        "author": "Kenney",
+        "url": "https://kenney.nl/assets/animal-pack",
+        "metadataPath": "2d-sprites/characters/kenney-animal-pack/metadata.json",
+        "metadataSha256": "sha256:cf334fd5df300460564d249f75cb2a41420ce537b6bac0d630c977b9ceffe507"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "attributionRequired": false,
+        "copyrightNoticeRequired": false,
+        "licenseNoticeRequired": false,
+        "modificationNoticeRequired": false,
+        "commercialUseAllowed": true,
+        "editableProjectDistributionAllowed": true,
+        "reusableTemplateDistributionAllowed": true
+      }
+    }
+  ]
+}

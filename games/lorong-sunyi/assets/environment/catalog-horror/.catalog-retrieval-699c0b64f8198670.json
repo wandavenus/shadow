@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "archiveSha256": "33df3adbbfee788031e4ad283a8997e409f5038f5901582dcc0bd5c4dbcb3036",
+  "archiveSizeBytes": 7991212,
+  "members": [
+    {
+      "member": "Horror background/corridor.jpg",
+      "sha256": "78cc4dee9d6fa90d885756ade7f6b6082b4e6ea6b96613ba306ddfcbfce4fab2",
+      "sizeBytes": 74956
+    }
+  ],
+  "dependencyCoverage": "glb-gltf-obj-mtl-textureatlas-bmfont-tiled",
+  "limitations": [],
+  "catalogSources": [
+    {
+      "snapshotId": "catalog-20260924-japan-characters-scene-removal-v1",
+      "catalogPath": "2d-sprites/cross-category/itch-io-2244246/assets.zip"
+    }
+  ],
+  "catalogMetadata": [
+    {
+      "snapshotId": "catalog-20260924-japan-characters-scene-removal-v1",
+      "catalogPath": "2d-sprites/cross-category/itch-io-2244246/assets.zip",
+      "metadataPath": "2d-sprites/cross-category/itch-io-2244246/metadata.json",
+      "metadataSha256": "e67a841c94905e3f46408f007819eb4be883d8724a02d5e64f19cad83a30f12f",
+      "archiveSha256": "33df3adbbfee788031e4ad283a8997e409f5038f5901582dcc0bd5c4dbcb3036",
+      "source": {
+        "packId": "itch-io:2244246",
+        "name": "Horror Interior Backgrounds Free CC0",
+        "url": "https://the-outlander.itch.io/horror-backgrounds-scary-haunted-interior-free-cc0",
+        "metadataPath": "2d-sprites/cross-category/itch-io-2244246/metadata.json",
+        "metadataSha256": "sha256:e67a841c94905e3f46408f007819eb4be883d8724a02d5e64f19cad83a30f12f"
+      },
+      "license": {
+        "id": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "attributionRequired": false,
+        "copyrightNoticeRequired": false,
+        "licenseNoticeRequired": false,
+        "modificationNoticeRequired": false,
+        "commercialUseAllowed": true,
+        "editableProjectDistributionAllowed": true,
+        "reusableTemplateDistributionAllowed": true
+      }
+    }
+  ]
+}
