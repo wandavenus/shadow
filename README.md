@@ -4,6 +4,6 @@
 
 ### Lorong Sunyi
 
-Prototipe horor psikologis 2.5D Godot berbahasa Indonesia. Source proyek berada di [`games/lorong-sunyi`](games/lorong-sunyi); petunjuk menjalankan dan batas ekspor Android ada di [README game](games/lorong-sunyi/README.md).
+Prototipe horor psikologis 2.5D Godot berbahasa Indonesia. Source code, konfigurasi, artwork, sprite, font, dan metadata lisensi tersedia di [`games/lorong-sunyi`](games/lorong-sunyi). Tidak ada GitHub Actions secret yang wajib disiapkan untuk membuat APK rilis.
 
-Media runtime tetap berada di penyimpanan aset proyek Manus dan tidak disalin ke Git. Clone source saja tidak memuat binary artwork; lihat [`ASSETS.md`](games/lorong-sunyi/ASSETS.md) untuk asal dan peran aset.
+Lihat [README game](games/lorong-sunyi/README.md) untuk menjalankan proyek atau memicu workflow satu klik **Build APK Rilis Android — Lorong Sunyi**. [ASSETS.md](games/lorong-sunyi/ASSETS.md) mencatat sumber dan fakta lisensi aset.

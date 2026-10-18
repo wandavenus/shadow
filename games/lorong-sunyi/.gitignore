@@ -1,28 +1,14 @@
 .godot/
 dist/
 build/
+site/
 node_modules/
 .manus-logs/
-# --- injected at scaffold time (see gitignore.project in the template) ---
-/assets/**/*.png
-/assets/**/*.jpg
-/assets/**/*.jpeg
-/assets/**/*.webp
-/assets/**/*.gif
-/assets/**/*.bmp
-/assets/**/*.svg
-/assets/**/*.ico
-/assets/**/*.ogg
-/assets/**/*.wav
-/assets/**/*.mp3
-/assets/**/*.m4a
-/assets/**/*.mp4
-/assets/**/*.webm
-/assets/**/*.ttf
-/assets/**/*.otf
-/assets/**/*.woff
-/assets/**/*.woff2
 
-!site/**
+# Temporary catalog retrieval receipts are private workflow metadata, not game source.
+/assets/**/.catalog-retrieval-*.json
 
-# Template fonts (subset WOFF2) restore from assets.lock.json like other media.
+# Never commit signing material or local secrets.
+*.keystore
+*.jks
+.env

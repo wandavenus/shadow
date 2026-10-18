@@ -6,7 +6,7 @@ on:
       accept_android_sdk_licenses:
         description: Saya telah meninjau dan menyetujui lisensi Android SDK untuk run ini
         required: true
-        default: false
+        default: true
         type: boolean
 
 permissions:
@@ -37,53 +37,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Pulihkan media runtime bila URL arsip disediakan
-        env:
-          LORONG_ASSETS_ARCHIVE_URL: ${{ secrets.LORONG_ASSETS_ARCHIVE_URL }}
-        run: |
-          set -euo pipefail
-          if [[ -z "${LORONG_ASSETS_ARCHIVE_URL:-}" ]]; then
-            echo "Secret arsip media tidak disetel; workflow akan memeriksa media yang ada di checkout."
-            exit 0
-          fi
-          case "$LORONG_ASSETS_ARCHIVE_URL" in
-            https://*) ;;
-            *) echo "::error::LORONG_ASSETS_ARCHIVE_URL harus berupa URL HTTPS."; exit 1 ;;
-          esac
-          echo "::add-mask::$LORONG_ASSETS_ARCHIVE_URL"
-          archive="$RUNNER_TEMP/lorong-sunyi-assets.zip"
-          unpack="$RUNNER_TEMP/lorong-sunyi-assets"
-          curl --fail --silent --show-error --location --retry 3 --connect-timeout 30 --max-time 300 --max-filesize 104857600 --proto '=https' --proto-redir '=https' "$LORONG_ASSETS_ARCHIVE_URL" --output "$archive"
-          mkdir -p "$unpack"
-          python3 - "$archive" "$unpack" <<'PY'
-          import shutil
-          import stat
-          import sys
-          import zipfile
-          from pathlib import Path, PurePosixPath
-
-          archive_path, destination = map(Path, sys.argv[1:])
-          total_size = 0
-          with zipfile.ZipFile(archive_path) as bundle:
-              for item in bundle.infolist():
-                  name = PurePosixPath(item.filename)
-                  if (name.is_absolute() or "\\" in item.filename or ".." in name.parts
-                          or not name.parts or name.parts[0] != "assets"):
-                      raise SystemExit(f"Arsip hanya boleh berisi path assets/: {item.filename!r}")
-                  if stat.S_ISLNK(item.external_attr >> 16):
-                      raise SystemExit(f"Arsip tidak boleh berisi symbolic link: {item.filename!r}")
-                  total_size += item.file_size
-                  if total_size > 100 * 1024 * 1024:
-                      raise SystemExit("Ukuran hasil ekstraksi arsip melebihi batas 100 MiB.")
-              bundle.extractall(destination)
-          source_assets = destination / "assets"
-          if not source_assets.is_dir():
-              raise SystemExit("Arsip harus berisi folder assets/ pada level teratas.")
-          target_assets = Path("games/lorong-sunyi/assets")
-          target_assets.mkdir(parents=True, exist_ok=True)
-          shutil.copytree(source_assets, target_assets, dirs_exist_ok=True)
-          PY
-
       - name: Periksa media yang wajib untuk game
         run: |
           set -euo pipefail
@@ -104,7 +57,7 @@ jobs:
           done
           if (( ${#missing[@]} > 0 )); then
             printf 'Media tidak ditemukan: %s\n' "${missing[@]}"
-            echo "::error title=Media runtime belum tersedia::Tambahkan media ke checkout atau set Actions secret LORONG_ASSETS_ARCHIVE_URL ke URL HTTPS arsip ZIP yang berisi folder assets/ lengkap. Lihat README game."
+            echo "::error title=Media runtime belum tersedia::Pastikan semua sumber aset ada di repo; file yang hilang tercantum di atas."
             exit 1
           fi
 

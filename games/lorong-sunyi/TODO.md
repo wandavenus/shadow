@@ -26,10 +26,11 @@
 - [x] Integrasikan aset yang dibutuhkan ke scene; pertahankan provenance dan fakta lisensi katalog.
 - [x] Ganti identitas, splash/loading screen, artwork sharing, dan favicon bawaan agar konsisten dengan Lorong Sunyi.
 - [x] Simpan source proyek ke repo GitHub `wandavenus/shadow` di subfolder `games/lorong-sunyi` tanpa menimpa README, lisensi, atau konten repo yang sudah ada.
+- [x] Sertakan semua media game yang diperlukan langsung di repo publik; workflow Android tidak lagi membutuhkan URL arsip atau secret media.
 
 ## 5. Build APK rilis melalui GitHub Actions
 
 - [x] Tambahkan preset `Android Release` dan workflow manual Godot 4.7.2 yang memakai `--export-release`, menandatangani APK, memverifikasi tanda tangan, dan mengunggah artifact Actions tanpa membuat GitHub Release atau mengunggah ke Play Store.
-- [x] Minta persetujuan eksplisit atas lisensi Android SDK melalui checkbox workflow yang default-nya tidak dicentang.
-- [x] Dukung signing key sementara per run atau tiga GitHub Actions secrets untuk key persisten.
-- [ ] Jalankan build pertama setelah media runtime dipulihkan melalui secret `LORONG_ASSETS_ARCHIVE_URL` (atau disediakan di checkout) dan persetujuan SDK dicentang. Repo saat ini sengaja tidak menyimpan biner media.
+- [x] Gunakan persetujuan lisensi Android SDK yang sudah diberikan; input workflow default-nya tercentang.
+- [x] Dukung signing key sementara per run tanpa secret; tiga secret signing key tetap hanya opsional untuk instalasi pembaruan tanpa uninstall.
+- [ ] Jalankan workflow pertama setelah perubahan media ini; belum ada APK yang dihasilkan.

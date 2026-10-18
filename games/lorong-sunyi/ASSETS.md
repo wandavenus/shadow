@@ -8,7 +8,7 @@ Sumber katalog berikut dipilih melalui metadata resmi katalog. Metadata mencatat
 | Sprite prop interaktif | Furniture Assets — `Untitled 17.png` (atlas furnitur) | https://zebravibe.itch.io/furniture | `itch-io:2200439` | `ac45ddc5d93199fa1233c4e2ba8ad42794480aa09f422f9f3f091427218cf71a` |
 | Referensi suasana, tidak diekspor | Horror Interior Backgrounds Free CC0 — `Horror background/corridor.jpg` | https://the-outlander.itch.io/horror-backgrounds-scary-haunted-interior-free-cc0 | `itch-io:2244246` | `33df3adbbfee788031e4ad283a8997e409f5038f5901582dcc0bd5c4dbcb3036` |
 
-Aset katalog diambil melalui akses resmi; receipt dan provenance retrieval dipertahankan. `scripts/lorong/prop_catalog.gd` memetakan atlas furnitur ke bangku, lemari, laci, meja, lampu, jam, potret, dan pintu. Sprite kelinci menjadi basis Mika; skala, gerakan, dan y-sort membuatnya terbaca sebagai avatar chibi pada ruang oblique. Gambar koridor katalog tidak ditempel di scene karena akan menampilkan benda statis yang tak bisa diperiksa.
+Aset gambar dan font yang diperlukan kini disertakan langsung di repo publik. Fakta sumber/lisensi tercatat di dokumen ini dan `asset-provenance.json`; receipt retrieval sementara sengaja tidak disertakan di Git atau build. `scripts/lorong/prop_catalog.gd` memetakan atlas furnitur ke bangku, lemari, laci, meja, lampu, jam, potret, dan pintu. Sprite kelinci menjadi basis Mika; skala, gerakan, dan y-sort membuatnya terbaca sebagai avatar chibi pada ruang oblique. Gambar koridor katalog tidak ditempel di scene karena akan menampilkan benda statis yang tak bisa diperiksa.
 
 ## Artwork orisinal dan optimasi runtime
 
