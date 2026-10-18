@@ -1,6 +1,12 @@
 name: Build APK Rilis Android — Lorong Sunyi
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "games/lorong-sunyi/**"
+      - ".github/workflows/build-android-release.yml"
   workflow_dispatch:
     inputs:
       accept_android_sdk_licenses:
@@ -23,7 +29,7 @@ jobs:
     timeout-minutes: 45
     env:
       GAME_DIR: games/lorong-sunyi
-      ACCEPT_ANDROID_SDK_LICENSES: ${{ inputs.accept_android_sdk_licenses }}
+      ACCEPT_ANDROID_SDK_LICENSES: ${{ github.event_name == 'push' || inputs.accept_android_sdk_licenses }}
       ANDROID_RELEASE_KEYSTORE_BASE64: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
       ANDROID_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
       ANDROID_RELEASE_KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
@@ -77,7 +83,7 @@ jobs:
       - name: Siapkan Android SDK
         uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
         with:
-          accept-android-sdk-licenses: ${{ inputs.accept_android_sdk_licenses }}
+          accept-android-sdk-licenses: ${{ env.ACCEPT_ANDROID_SDK_LICENSES }}
           log-accepted-android-sdk-licenses: false
           packages: >-
             platform-tools
@@ -191,47 +197,9 @@ jobs:
               raise SystemExit("Min SDK/Target SDK override tidak boleh disetel saat Use Gradle Build dinonaktifkan.")
           if not re.search(r'(?m)^vram_texture_compression/for_mobile=true$', settings):
               raise SystemExit("Preset Android harus mengaktifkan vram_texture_compression/for_mobile.")
-          if not re.search(r'(?m)^vram_texture_compression/for_desktop=false
-          PY
-
-      - name: Ekspor APK dengan preset Android Release
-        working-directory: games/lorong-sunyi
-        run: |
-          set -euo pipefail
-          mkdir -p build/android
-          apk="$GITHUB_WORKSPACE/games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
-          godot --headless --path . --export-release "Android Release" "$apk"
-          test -s "$apk"
-          "$ANDROID_SDK_ROOT/build-tools/35.0.1/apksigner" verify --verbose "$apk"
-
-      - name: Unggah APK sebagai artifact workflow
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: Lorong-Sunyi-APK-Rilis
-          path: games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk
-          if-no-files-found: error
-, settings):
+          if not re.search(r'(?m)^vram_texture_compression/for_desktop=false$', settings):
               raise SystemExit("Preset Android harus menonaktifkan kompresi desktop.")
-          if not re.search(r'(?m)^textures/vram_compression/import_etc2_astc=true
-          PY
-
-      - name: Ekspor APK dengan preset Android Release
-        working-directory: games/lorong-sunyi
-        run: |
-          set -euo pipefail
-          mkdir -p build/android
-          apk="$GITHUB_WORKSPACE/games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
-          godot --headless --path . --export-release "Android Release" "$apk"
-          test -s "$apk"
-          "$ANDROID_SDK_ROOT/build-tools/35.0.1/apksigner" verify --verbose "$apk"
-
-      - name: Unggah APK sebagai artifact workflow
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: Lorong-Sunyi-APK-Rilis
-          path: games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk
-          if-no-files-found: error
-, settings):
+          if not re.search(r'(?m)^textures/vram_compression/import_etc2_astc=true$', settings):
               raise SystemExit("Preset Android harus mengaktifkan ETC2/ASTC texture compression.")
           print("Preset Android tervalidasi: SDK overrides tidak konflik dan ETC2/ASTC mobile aktif.")
           PY
