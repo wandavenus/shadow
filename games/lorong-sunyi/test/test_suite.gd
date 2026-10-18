@@ -96,7 +96,16 @@ func _test_controller() -> void:
 	_check(touch_controls != null, "kontrol sentuh harus aktif pada HUD")
 	for button_name: String in ["MoveUp", "MoveDown", "MoveLeft", "MoveRight", "InteractButton"]:
 		_check(touch_controls != null and touch_controls.get_node_or_null(button_name) is Button, "tombol sentuh hilang: " + button_name)
+	for button_name: String in ["MoveUp", "MoveDown", "MoveLeft", "MoveRight"]:
+		var dpad_button := touch_controls.get_node_or_null(button_name) as Button if touch_controls != null else null
+		_check(dpad_button != null and dpad_button.size.x >= 78.0 and dpad_button.size.y >= 72.0, "area sentuh D-pad harus memakai ukuran aktual yang cukup besar: " + button_name)
 	_check(InputMap.has_action("move_left") and InputMap.has_action("move_down"), "aksi gerak keyboard harus tersedia")
+	var move_up_button := touch_controls.get_node_or_null("MoveUp") as Button if touch_controls != null else null
+	if move_up_button != null:
+		move_up_button.button_down.emit()
+		_check(Input.is_action_pressed("move_up"), "D-pad harus mengaktifkan input saat ditekan")
+		move_up_button.button_up.emit()
+		_check(not Input.is_action_pressed("move_up"), "D-pad harus melepas input saat tombol dilepas")
 	_check(int(ProjectSettings.get_setting("display/window/handheld/orientation", -1)) == 0, "orientasi Android harus lanskap")
 	main.call("_return_to_title")
 	await get_tree().process_frame

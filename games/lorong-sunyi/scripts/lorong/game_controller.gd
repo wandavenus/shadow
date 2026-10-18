@@ -260,24 +260,28 @@ func _build_touch_controls() -> void:
 	controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hud.add_child(controls)
 
-	var up := _button("▲", Vector2(62.0, 58.0), false)
+	var up := _button("▲", Vector2(78.0, 72.0), false)
 	up.name = "MoveUp"
-	up.position = Vector2(91.0, 486.0)
+	up.position = Vector2(96.0, 462.0)
+	up.add_theme_font_size_override("font_size", 24)
 	controls.add_child(up)
 	_bind_hold_button(up, "move_up")
-	var left := _button("◀", Vector2(62.0, 58.0), false)
+	var left := _button("◀", Vector2(78.0, 72.0), false)
 	left.name = "MoveLeft"
-	left.position = Vector2(25.0, 548.0)
+	left.position = Vector2(12.0, 540.0)
+	left.add_theme_font_size_override("font_size", 24)
 	controls.add_child(left)
 	_bind_hold_button(left, "move_left")
-	var right := _button("▶", Vector2(62.0, 58.0), false)
+	var right := _button("▶", Vector2(78.0, 72.0), false)
 	right.name = "MoveRight"
-	right.position = Vector2(157.0, 548.0)
+	right.position = Vector2(180.0, 540.0)
+	right.add_theme_font_size_override("font_size", 24)
 	controls.add_child(right)
 	_bind_hold_button(right, "move_right")
-	var down := _button("▼", Vector2(62.0, 58.0), false)
+	var down := _button("▼", Vector2(78.0, 72.0), false)
 	down.name = "MoveDown"
-	down.position = Vector2(91.0, 610.0)
+	down.position = Vector2(96.0, 618.0)
+	down.add_theme_font_size_override("font_size", 24)
 	controls.add_child(down)
 	_bind_hold_button(down, "move_down")
 
@@ -555,6 +559,9 @@ func _button(text: String, minimum_size: Vector2, primary: bool) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.custom_minimum_size = minimum_size
+	# Manually positioned controls do not get their size from a Container.
+	# Set the actual rect too, otherwise their touch hitboxes can remain tiny.
+	button.size = minimum_size
 	button.focus_mode = Control.FOCUS_NONE
 	button.add_theme_font_size_override("font_size", 15 if primary else 13)
 	button.add_theme_color_override("font_color", Color(0.98, 0.91, 0.79))
