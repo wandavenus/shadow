@@ -16,7 +16,7 @@ on:
         type: boolean
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: lorong-sunyi-android-release-${{ github.ref }}
@@ -220,3 +220,14 @@ jobs:
           name: Lorong-Sunyi-APK-Rilis
           path: games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk
           if-no-files-found: error
+
+      - name: Publikasikan APK ke GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="lorong-sunyi-v1.0.${GITHUB_RUN_NUMBER}"
+          apk="games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
+          gh release create "$tag" "$apk" \
+            --title "Lorong Sunyi v1.0.${GITHUB_RUN_NUMBER}" \
+            --notes "APK rilis otomatis dari commit ${GITHUB_SHA} pada branch ${GITHUB_REF_NAME}."
