@@ -189,10 +189,11 @@ jobs:
           settings = options.group(1) if options else ""
           if re.search(r"(?m)^gradle_build/(?:min_sdk|target_sdk)=", settings):
               raise SystemExit("Min SDK/Target SDK override tidak boleh disetel saat Use Gradle Build dinonaktifkan.")
-          project = Path("project.godot").read_text()
-          if not re.search(r'(?m)^textures/vram_compression/import_etc2_astc=true$', project):
-              raise SystemExit("Project Settings textures/vram_compression/import_etc2_astc harus aktif untuk ekspor Android.")
-          print("Preset Android dan ETC2/ASTC tervalidasi.")
+          if not re.search(r'(?m)^vram_texture_compression/for_mobile=true$', settings):
+              raise SystemExit("Preset Android harus mengaktifkan vram_texture_compression/for_mobile.")
+          if not re.search(r'(?m)^vram_texture_compression/for_desktop=false$', settings):
+              raise SystemExit("Preset Android harus menonaktifkan kompresi desktop.")
+          print("Preset Android tervalidasi: SDK overrides tidak konflik dan kompresi mobile aktif.")
           PY
 
       - name: Ekspor APK dengan preset Android Release
