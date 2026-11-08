@@ -41,12 +41,10 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/"
       },
       "origin": "catalog",
-      "referenceEvidence": [
-        "scripts/lorong/player.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:61a429490f6dbeea65f8e1b37b884d1aff61271ebe34bbc2c837f974aeaf0adf",
-      "shipped": true,
+      "shipped": false,
       "size": 9004,
       "source": {
         "author": "Kenney",
@@ -61,10 +59,8 @@
       },
       "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/lorong/player.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/characters/empty-presence-512.png": {
@@ -73,20 +69,16 @@
       "inputs": [],
       "license": {},
       "origin": "unknown",
-      "referenceEvidence": [
-        "scripts/lorong/room.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:3a01a9bb7f6eaf1bc450d40a15b2c0222478c269a9cddeb091ddc333bdee0e8b",
-      "shipped": true,
+      "shipped": false,
       "size": 116392,
       "source": {},
       "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/lorong/room.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/characters/empty_presence.png": {
@@ -174,20 +166,16 @@
       "inputs": [],
       "license": {},
       "origin": "unknown",
-      "referenceEvidence": [
-        "scripts/lorong/room.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:de2f489984d502e652755e8292dec8b69915f6dcd5edb179745ea1d64b1c42a9",
-      "shipped": true,
+      "shipped": false,
       "size": 1098489,
       "source": {},
       "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/lorong/room.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/environment/lorong_empty_room.png": {
@@ -248,12 +236,10 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/"
       },
       "origin": "catalog",
-      "referenceEvidence": [
-        "scripts/lorong/room.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:f8a70b31e97d8901d60e4ca5a097a41482994428b24a92aadb9913c4ba22b40e",
-      "shipped": true,
+      "shipped": false,
       "size": 18523,
       "source": {
         "catalogPath": "2d-sprites/props/itch-io-itch-io-2200439-furniture-assets/assets.zip",
@@ -267,10 +253,8 @@
       },
       "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/lorong/room.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/share/favicon.png": {
@@ -279,22 +263,16 @@
       "inputs": [],
       "license": {},
       "origin": "unknown",
-      "referenceEvidence": [
-        "game-sharing.json",
-        "project.godot"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:29f5571becf94175e97938db596d6de2e6667bf8b3abb863b75c662a8d93d7ce",
-      "shipped": true,
+      "shipped": false,
       "size": 9772,
       "source": {},
       "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "game-sharing.json",
-        "project.godot"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/share/lorong-sunyi-og-1200x630.png": {
@@ -303,20 +281,16 @@
       "inputs": [],
       "license": {},
       "origin": "unknown",
-      "referenceEvidence": [
-        "game-sharing.json"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:d79a291f87b06dbf36e934b3e99aa416ec73f8094fca476b2d54e425639c7a2e",
-      "shipped": true,
+      "shipped": false,
       "size": 889179,
       "source": {},
       "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "game-sharing.json"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/share/lorong-sunyi-og.png": {
@@ -343,22 +317,16 @@
       "inputs": [],
       "license": {},
       "origin": "unknown",
-      "referenceEvidence": [
-        "project.godot",
-        "scripts/lorong/game_controller.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:af0858bbf7ae8b512e61ac0e85e1e13b0ee04c59fa2755e1145940abfe15188e",
-      "shipped": true,
+      "shipped": false,
       "size": 1063206,
       "source": {},
       "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "project.godot",
-        "scripts/lorong/game_controller.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/characters/runner.png": {

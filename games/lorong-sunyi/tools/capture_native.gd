@@ -1,6 +1,11 @@
 extends SceneTree
 
-# Bukti visual native saja; tools/ tidak disertakan dalam ekspor pemain.
+# Developer-only native capture. The old "threat" and "result" modes belonged to
+# the retired horror prototype and are intentionally rejected; this tool is not
+# part of the player export.
+const SUPPORTED_MODES := ["title", "village", "focus", "walk", "pause", "touch"]
+const RETIRED_MODES := ["threat", "result"]
+
 
 func _initialize() -> void:
 	call_deferred("_capture")
@@ -15,6 +20,15 @@ func _capture() -> void:
 	var mode := OS.get_environment("LORONG_CAPTURE_MODE")
 	if mode.is_empty():
 		mode = "title"
+	if mode in RETIRED_MODES:
+		push_error("Mode capture '%s' adalah legacy dari prototype horor dan tidak didukung. Gunakan: %s" % [mode, ", ".join(SUPPORTED_MODES)])
+		quit(2)
+		return
+	if mode not in SUPPORTED_MODES:
+		push_error("Mode capture tidak dikenal: %s. Gunakan: %s" % [mode, ", ".join(SUPPORTED_MODES)])
+		quit(2)
+		return
+
 	var packed := load("res://scenes/main.tscn") as PackedScene
 	if packed == null:
 		push_error("Scene utama Lorong Sunyi tidak dapat dimuat")
@@ -30,25 +44,27 @@ func _capture() -> void:
 		await process_frame
 		var room := main.get("_room") as LorongRoom
 		if room == null:
-			push_error("Area permainan tidak tersedia untuk capture")
+			push_error("Scene Village tidak tersedia untuk capture")
 			quit(1)
 			return
 		match mode:
-			"threat", "result":
-				for prop_id: String in ["bangku", "laci", "lemari", "meja", "lampu"]:
-					room.interact_prop(prop_id)
-				if mode == "result":
-					room.interact_prop("jam")
-					room.interact_prop("potret")
-					room.interact_prop("pintu")
-					room.submit_code("417")
+			"focus":
+				var player := room.get("player") as CharacterBody2D
+				if player != null:
+					player.global_position = room.call("npc_position_for_testing", "pak_ranu")
+					room.call("_update_interaction_prompt", true)
+			"walk":
+				var player := room.get("player") as CharacterBody2D
+				var visual := player.get_node_or_null("CharacterVisual") as Node if player != null else null
+				if visual != null:
+					visual.call("set_moving", true)
 			"pause":
-				main.call("_toggle_pause")
+				main.call("_open_pause")
 			"touch":
 				var touch_controls := main.get_node_or_null("HUD/TouchControls") as Control
 				if touch_controls != null:
 					touch_controls.visible = true
-			_:
+			"village":
 				pass
 
 	for _frame: int in 8:

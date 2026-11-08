@@ -1,15 +1,15 @@
 extends CharacterBody2D
 class_name LorongPlayer
 
-const PLAYER_TEXTURE: Texture2D = preload("res://assets/characters/catalog-kenney/PNG/Round (outline)/rabbit.png")
-const SPRITE_BASE_SCALE := 0.22
+const PLAYER_TEXTURE: Texture2D = preload("res://assets/characters/desa-hewan/mika-fox-runtime-384x576.png")
+const CharacterVisualScript = preload("res://scripts/lorong/character_visual.gd")
+const SPRITE_BASE_SCALE := 0.18
 
 var move_speed := 170.0
 var visual_scale := 1.0
 var reduced_motion := false
-var movement_enabled := true
-var _walk_clock := 0.0
-var _sprite: Sprite2D
+var facing_direction := Vector2.RIGHT
+var _visual: Node2D
 
 
 func _ready() -> void:
@@ -26,34 +26,36 @@ func _ready() -> void:
 	body_shape.shape = circle
 	add_child(body_shape)
 
-	_sprite = Sprite2D.new()
-	_sprite.name = "KelinciChibi"
-	_sprite.texture = PLAYER_TEXTURE
-	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	_sprite.position.y = -float(PLAYER_TEXTURE.get_height()) * SPRITE_BASE_SCALE * 0.46
-	add_child(_sprite)
-	_refresh_scale()
+	var shadow := Polygon2D.new()
+	shadow.name = "GroundShadow"
+	shadow.color = Color(0.025, 0.035, 0.055, 0.36)
+	shadow.polygon = PackedVector2Array([
+		Vector2(-17.0, -4.0), Vector2(-11.0, -7.0), Vector2(0.0, -8.0), Vector2(11.0, -7.0),
+		Vector2(17.0, -4.0), Vector2(11.0, -1.0), Vector2(0.0, 0.0), Vector2(-11.0, -1.0),
+	])
+	shadow.position = Vector2(0.0, 4.0)
+	shadow.z_index = -1
+	add_child(shadow)
+
+	_visual = CharacterVisualScript.new() as Node2D
+	_visual.name = "CharacterVisual"
+	_visual.call("configure", PLAYER_TEXTURE, "fox", Color.WHITE, SPRITE_BASE_SCALE, "Mika", "PENJELAJAH")
+	add_child(_visual)
 
 
-func _physics_process(delta: float) -> void:
-	if not movement_enabled:
-		velocity = Vector2.ZERO
-		return
-
+func _physics_process(_delta: float) -> void:
 	var input_axis := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var oblique_axis := Vector2(input_axis.x, input_axis.y * 0.72)
-	if oblique_axis.length_squared() > 0.001:
+	var is_moving := oblique_axis.length_squared() > 0.001
+	if is_moving:
 		oblique_axis = oblique_axis.normalized()
+		facing_direction = oblique_axis
 		velocity = oblique_axis * move_speed
-		_walk_clock += delta
 		if input_axis.x != 0.0:
-			_sprite.flip_h = input_axis.x < 0.0
-		_sprite.position.y = -float(PLAYER_TEXTURE.get_height()) * SPRITE_BASE_SCALE * visual_scale * 0.46
-		if not reduced_motion:
-			_sprite.position.y -= absf(sin(_walk_clock * 10.0)) * 1.6
+			_visual.call("set_facing_left", input_axis.x < 0.0)
 	else:
 		velocity = Vector2.ZERO
-		_sprite.position.y = -float(PLAYER_TEXTURE.get_height()) * SPRITE_BASE_SCALE * visual_scale * 0.46
+	_visual.call("set_moving", is_moving)
 
 	move_and_slide()
 	position.x = clampf(position.x, 76.0, 1204.0)
@@ -66,21 +68,11 @@ func set_move_speed(value: float) -> void:
 
 func set_visual_scale(value: float) -> void:
 	visual_scale = clampf(value, 0.6, 1.8)
-	_refresh_scale()
+	if _visual != null:
+		_visual.call("set_scale_factor", visual_scale)
 
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
-
-
-func set_hidden(value: bool) -> void:
-	visible = not value
-	movement_enabled = not value
-	velocity = Vector2.ZERO
-
-
-func _refresh_scale() -> void:
-	if _sprite == null:
-		return
-	_sprite.scale = Vector2.ONE * SPRITE_BASE_SCALE * visual_scale
-	_sprite.position.y = -float(PLAYER_TEXTURE.get_height()) * SPRITE_BASE_SCALE * visual_scale * 0.46
+	if _visual != null:
+		_visual.call("set_reduced_motion", value)

@@ -1,43 +1,46 @@
 # Rencana Vertical Slice — Lorong Sunyi
 
 ## Arah pengalaman
+Bangun satu vertical slice slice-of-life yang damai di desa kompak dan terbatas. Pemain menjelajah, menyapa warga, membantu lewat tugas sederhana, mengamati rutinitas yang berubah bersama waktu/cuaca, lalu bebas menjelajahi desa setelah tugas utama selesai. Nuansa low-fi 2D oblique/2.5D dan blue-hour yang redup harus terasa tenang serta hangat—bukan ancaman atau horor.
 
-Buat satu vertical slice horor eksplorasi malam 2.5D yang singkat, terbaca, dan punya identitas orisinal. Referensi genre dan sistem boleh menjadi bahan pembelajaran, tetapi cerita, karakter, visual, tata ruang, teks, dan audio Lorong Sunyi harus dirancang sendiri—bukan salinan Yomawari 1:1.
+Seluruh cerita, nama, dialog, karakter, aset, UI, dan adegan harus orisinal. Inspirasi genre hanya untuk mood umum; jangan menyalin elemen khas game lain.
 
-## Pondasi yang dipertahankan
+## Loop slice
+1. Mulai dengan arahan singkat; salam pertama tetap netral pada semua waktu, sementara catatan cuaca menyesuaikan keadaan.
+2. Sapa Pak Ranu dan, bila pemain berkenan, bantu mengantar keranjang sayur ke kedai Bu Sari.
+3. Beri feedback sosial yang hangat; setelah tugas utama selesai, buka free exploration tanpa timer atau urutan wajib.
+4. Tugas opsional menghubungkan Nara, bunga kecil, dan Lio, dengan feedback tersendiri.
+5. Waktu, cuaca, aktivitas warga, dan ambience berubah selama eksplorasi; jeda menghentikan simulasi.
 
-Pengembangan berangkat dari pondasi game yang sudah ada, bukan memulai ulang:
+## Roster dan arah karakter
+- Mika — fox, karakter pemain.
+- Pak Ranu — goat, petani.
+- Bu Sari — cat, pemilik kedai.
+- Nara — rabbit, tetangga pekebun.
+- Pak Jati — bear, perajin anyaman.
+- Lio — dog, anak tetangga.
 
-- Satu kamar sebagai area awal.
-- Delapan prop yang sudah tersedia.
-- Kode teka-teki `417`.
-- Meter kegelisahan.
-- Pengejar dan lemari sebagai cara menghadapi ancaman.
-- Kontrol keyboard dan touch.
+Setiap karakter harus terbaca sebagai humanoid-chibi full-body: kepala, telinga, muzzle, torso, lengan/tangan, kaki, dan telapak/sepatu terlihat menyatu dan menapak. Jangan memakai kepala melayang atau membiarkan badan/kaki hilang. Untuk slice ini, sumber karakter berupa sprite full-body utuh; ekor dibuat terpisah sebagai komponen procedural dan dianimasikan. Idle memberi gerak napas halus; berjalan menggerakkan badan dan ekor, sementara rutinitas NPC benar-benar berpindah di world. Pemisahan setiap anggota tubuh menjadi bone/sprite tersendiri bukan syarat slice.
 
-Perluasan berikutnya harus membuat pondasi ini bekerja sebagai satu pengalaman yang padu, sambil mempertahankan kontrol yang sudah dikenal pemain.
+Name tag nama dan peran harus berkontras, terbaca pada resolusi 1280×720, dan tidak menutupi wajah atau tujuan interaksi.
 
-## Tahapan pengembangan
+## Waktu, cuaca, dan sapaan
+- Daypart persis `morning`, `day`, `evening`, `night`; weather persis `clear`, `cloudy`, `rain`, `wind`.
+- Jam berjalan selama bermain dan berhenti saat pause. Waktu/cuaca mengubah setidaknya satu rutinitas/aktivitas warga dan ambience/visual.
+- Sapaan pertama saat berbicara dengan warga harus netral pada semua daypart; catatan cuaca dapat berubah sesuai keadaan. Uji semua 16 kombinasi waktu/cuaca.
+- Quest utama dan tugas opsional harus bisa selesai pada seluruh kombinasi itu tanpa menunggu atau dibatasi waktu.
+- Tidak ada deadline, hukuman, fear, chase, hide, damage, atau lose state.
+- Kontrak visual Dudul: `set_time_of_day(hour24)` dan `set_weather(kind,intensity,wind=0)`. Kontrak Meki: `set_village_conditions(daypart, weather)` pada kondisi awal serta tiap perubahan, dengan ambience opt-in.
+- Reduced-motion harus meredam animasi tanpa menghalangi gerak atau interaksi.
 
-1. **Tetapkan identitas visual dan cerita orisinal.** Rumuskan premis, suasana, karakter, bahasa visual, dan motif khas Lorong Sunyi. Gunakan referensi hanya untuk memahami pola desain horor eksplorasi; jangan menyalin elemen khas karya lain.
-2. **Perluas kamar menjadi rute pendek.** Susun satu area eksplorasi yang tetap ringkas, dengan landmark yang mudah dikenali, jalan buntu yang disengaja, area aman, serta clue yang membantu pemain memahami tujuan dan ruang.
-3. **Jadikan senter alat investigasi.** Pemain dapat menyorot dan memeriksa benda, menemukan clue, serta mengungkap bahaya. Mendekati bahaya yang tersingkap harus membawa konsekuensi yang jelas dan dapat dipelajari, bukan hukuman sewenang-wenang.
-4. **Buat aturan ancaman terbaca.** Beri tanda kedatangan, kondisi deteksi, transisi ke pengejaran, dan kesempatan yang masuk akal untuk kabur atau bersembunyi. Pemain perlu dapat menghubungkan tanda yang terlihat atau terdengar dengan tindakan ancaman.
-5. **Bangun audio sebagai petunjuk.** Tambahkan ambience, langkah, napas atau detak yang menyampaikan perubahan keadaan, serta bunyi interaksi yang dirancang khusus untuk identitas Lorong Sunyi. Audio perlu membantu orientasi dan antisipasi, bukan sekadar menambah volume ketakutan.
-6. **Poles satu area sampai mandiri dimainkan.** Pastikan tujuan, interaksi, petunjuk, dan aturan ancaman dapat dipahami tanpa panduan developer. Uji keseluruhan alur dengan keyboard dan touch, lalu rapikan kendala keterbacaan atau kontrol yang ditemukan.
+## Kontrol dan target
+Pertahankan kontrol keyboard dan touch UI, prompt interaksi, serta binding `move_down`. Export preset memakai Gradle, `minSdk=30`, `targetSdk=35`, dan hanya ABI `arm64-v8a`. Dokumentasi Godot 4.7 menempatkan `gradle_build/min_sdk` pada jalur Gradle; APK Debug lokal sudah membuktikan nilai manifest dan ABI tersebut. Jangan menjalankan Release/signing release/deploy sebagai bagian dari verifikasi slice.
 
-## Kriteria berhasil
-
-Vertical slice siap dianggap berhasil bila pemain:
-
-- Memahami apa yang perlu dicapai dan dapat menemukan langkah berikutnya melalui permainan.
-- Mendapat informasi berguna dari penggunaan senter untuk memeriksa benda, menemukan clue, atau mengenali bahaya.
-- Merasa ancaman itu adil karena tanda kedatangan dan perilakunya dapat dibaca, serta tersedia kesempatan yang wajar untuk merespons.
-- Dapat menuntaskan area dengan kontrol keyboard maupun touch tanpa instruksi langsung dari developer.
-
-## Referensi desain
-
-Referensi berikut adalah sumber resmi untuk mempelajari sistem dan konvensi horor eksplorasi malam. Keduanya bukan spesifikasi untuk ditiru; keputusan desain akhir harus mendukung dunia dan identitas orisinal Lorong Sunyi.
-
-- [Yomawari: Night Alone — System](https://www.nisamerica.com/yomawari-night-alone/system.php)
-- [Yomawari: Lost in the Dark — situs resmi](https://nisamerica.com/games/yomawari-lost-in-the-dark)
+## Acceptance dan regresi
+- Enam karakter menampilkan full body dan ciri spesies; tidak ada karakter berupa kepala melayang.
+- Ekor hadir pada semua rig; idle/walk menampilkan gerak badan dan ekor. NPC rutin bergerak, bukan hanya berubah warna.
+- Keenam name tag terbaca dan dialog tiap warga berbeda.
+- Salam tetap netral di semua daypart dan catatan cuaca cocok dengan tiap kombinasi dari 4 daypart × 4 cuaca.
+- Tugas utama dan opsional diuji pada seluruh 16 pasangan waktu/cuaca; satu penyelesaian tugas utama diuji end-to-end melalui input gerak, fokus target, dan interaksi normal tanpa teleport. Perubahan aktivitas, pause/resume, reduced-motion, serta free exploration juga diuji.
+- Automated verification: 571 pemeriksaan gameplay, 110 pemeriksaan kontrak audio, dan 29 pemeriksaan visual desa lulus. Pemeriksaan visual langsung serta uji perangkat Android masih terbuka.
+- APK Debug lokal lolos pemeriksa manifest dan isi: `minSdk=30`, `targetSdk=35`, native library hanya `arm64-v8a`, dan aset/script runtime utama tersedia. Release workflow tidak dijalankan.

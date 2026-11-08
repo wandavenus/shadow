@@ -14,10 +14,16 @@ const CUES := {
 	"player.action": {"path": "", "bus": "SFX"},
 	"enemy.impact": {"path": "", "bus": "SFX"},
 	"score.reward": {"path": "", "bus": "SFX"},
-	"game.pause": {"path": "", "bus": "UI"},
-	"game.victory": {"path": "", "bus": "SFX"},
-	"game.defeat": {"path": "", "bus": "SFX"},
-}
+		"game.pause": {"path": "", "bus": "UI"},
+		"game.victory": {"path": "", "bus": "SFX"},
+		"game.defeat": {"path": "", "bus": "SFX"},
+		"lorong.npc_greeting": {"path": "", "bus": "SFX"},
+		"lorong.npc_chat": {"path": "", "bus": "SFX"},
+		"lorong.found_something": {"path": "", "bus": "SFX"},
+		"lorong.helped_neighbor": {"path": "", "bus": "SFX"},
+		"lorong.evening_village": {"path": "", "bus": "SFX"},
+		"lorong.conditions_changed": {"path": "", "bus": "SFX"},
+	}
 
 var _streams: Dictionary = {}
 var _music_players: Array[BrowserBgmPlayer] = []

@@ -1,90 +1,136 @@
-extends StaticBody2D
-class_name LorongInteractiveProp
+extends Node2D
+class_name LorongVillageObject
 
-var prop_id := ""
-var display_name := ""
-var definition: Dictionary = {}
-var _sprite: Sprite2D
-var _base_scale := 1.0
+var object_id := ""
+var display_name := "Objek"
+var kind := ""
+var _art: Node2D
+var _title: Label
 var _focused := false
-var _state: Dictionary = {}
+var _available := true
 
 
-func configure(spec: Dictionary, atlas: Texture2D) -> void:
-	definition = spec.duplicate(true)
-	prop_id = str(definition.get("id", ""))
-	display_name = str(definition.get("name", "Benda"))
-	name = "Prop_%s" % prop_id
-	position = definition.get("position", Vector2.ZERO)
-	_base_scale = float(definition.get("scale", 1.0))
-	collision_layer = 1
-	collision_mask = 0
-	input_pickable = false
+func configure(spec: Dictionary) -> void:
+	object_id = str(spec.get("id", ""))
+	display_name = str(spec.get("name", "Objek"))
+	kind = str(spec.get("kind", ""))
+	name = "VillageObject_%s" % object_id
+	position = spec.get("position", Vector2.ZERO)
 
-	var region_values: Array = definition.get("region", [0, 0, 32, 32])
-	var region := Rect2(
-		float(region_values[0]), float(region_values[1]),
-		float(region_values[2]), float(region_values[3])
-	)
-	_sprite = Sprite2D.new()
-	_sprite.name = "Sprite"
-	_sprite.texture = atlas
-	_sprite.region_enabled = true
-	_sprite.region_rect = region
-	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_sprite.scale = Vector2.ONE * _base_scale
-	# The Node2D origin is the prop's ground contact point for Y-sorting and collision.
-	_sprite.position = Vector2(0.0, -region.size.y * _base_scale * 0.5)
-	add_child(_sprite)
+	_art = Node2D.new()
+	_art.name = "Artwork"
+	add_child(_art)
+	if kind == "basket":
+		_build_basket(spec.get("color", Color(0.62, 0.37, 0.20, 1.0)))
+	elif kind == "flower":
+		_build_flower(spec.get("color", Color(0.94, 0.72, 0.79, 1.0)))
 
-	var radius := float(definition.get("collision_radius", 0.0))
-	if radius > 0.0:
-		var collision := CollisionShape2D.new()
-		collision.name = "CollisionShape2D"
-		var circle := CircleShape2D.new()
-		circle.radius = radius
-		collision.shape = circle
-		add_child(collision)
-	_refresh_look()
+	_title = Label.new()
+	_title.name = "ObjectName"
+	_title.text = display_name
+	_title.position = Vector2(-72.0, -55.0)
+	_title.size = Vector2(144.0, 20.0)
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_title.label_settings = _label_settings(11, Color(0.98, 0.94, 0.82))
+	add_child(_title)
 
 
 func set_focused(value: bool) -> void:
 	if _focused == value:
 		return
 	_focused = value
-	_refresh_look()
+	if _art != null:
+		_art.scale = Vector2.ONE * (1.08 if _focused else 1.0)
+	if _title != null:
+		_title.label_settings = _label_settings(11, Color(1.0, 0.82, 0.49) if _focused else Color(0.98, 0.94, 0.82))
 
 
-func set_visual_state(new_state: Dictionary) -> void:
-	_state = new_state.duplicate(true)
-	_refresh_look()
+func set_available(value: bool) -> void:
+	_available = value
+	visible = _available
 
 
-func set_world_position(world_position: Vector2) -> void:
-	position = world_position
+func is_available() -> bool:
+	return _available
 
 
-func _refresh_look() -> void:
-	if _sprite == null:
-		return
-	var target_region: Array = definition.get("region", [0, 0, 32, 32])
-	if bool(_state.get("open", false)) and definition.has("open_region"):
-		target_region = definition.open_region
-	_sprite.region_rect = Rect2(
-		float(target_region[0]), float(target_region[1]),
-		float(target_region[2]), float(target_region[3])
-	)
-	_sprite.scale = Vector2.ONE * _base_scale * (1.045 if _focused else 1.0)
-	_sprite.position.y = -_sprite.region_rect.size.y * _sprite.scale.y * 0.5
-	if bool(_state.get("door_open", false)):
-		visible = false
-	else:
-		visible = true
-	var tint := Color.WHITE
-	if prop_id == "lampu" and bool(_state.get("lamp_on", false)):
-		tint = Color(1.0, 0.74, 0.36, 1.0)
-	if bool(_state.get("open", false)) and prop_id != "pintu":
-		tint = tint.lerp(Color(0.84, 0.76, 0.65, 1.0), 0.22)
-	if _focused:
-		tint = tint.lerp(Color(1.0, 0.84, 0.56, 1.0), 0.28)
-	_sprite.modulate = tint
+func _build_basket(base_color: Color) -> void:
+	var shadow := Polygon2D.new()
+	shadow.polygon = PackedVector2Array([
+		Vector2(-24.0, 0.0), Vector2(24.0, 0.0), Vector2(19.0, 8.0), Vector2(-19.0, 8.0)
+	])
+	shadow.color = Color(0.12, 0.12, 0.09, 0.30)
+	_art.add_child(shadow)
+
+	var body := Polygon2D.new()
+	body.polygon = PackedVector2Array([
+		Vector2(-20.0, -23.0), Vector2(20.0, -23.0), Vector2(16.0, 2.0), Vector2(-16.0, 2.0)
+	])
+	body.color = base_color
+	_art.add_child(body)
+
+	var rim := Line2D.new()
+	rim.points = PackedVector2Array([Vector2(-22.0, -23.0), Vector2(22.0, -23.0)])
+	rim.width = 5.0
+	rim.default_color = Color(0.79, 0.55, 0.31, 1.0)
+	_art.add_child(rim)
+
+	for y_offset: float in [-15.0, -7.0]:
+		var slat := Line2D.new()
+		slat.points = PackedVector2Array([Vector2(-18.0, y_offset), Vector2(18.0, y_offset)])
+		slat.width = 2.0
+		slat.default_color = Color(0.82, 0.58, 0.34, 0.92)
+		_art.add_child(slat)
+
+	for index: int in 3:
+		var leaf := Polygon2D.new()
+		var x_offset := float(index - 1) * 9.0
+		leaf.polygon = PackedVector2Array([
+			Vector2(x_offset - 7.0, -22.0), Vector2(x_offset, -37.0), Vector2(x_offset + 7.0, -22.0)
+		])
+		leaf.color = [Color(0.32, 0.55, 0.30), Color(0.46, 0.66, 0.34), Color(0.26, 0.47, 0.29)][index]
+		_art.add_child(leaf)
+
+
+func _build_flower(petal_color: Color) -> void:
+	var shadow := Polygon2D.new()
+	shadow.polygon = PackedVector2Array([
+		Vector2(-15.0, 0.0), Vector2(15.0, 0.0), Vector2(11.0, 6.0), Vector2(-11.0, 6.0)
+	])
+	shadow.color = Color(0.12, 0.12, 0.09, 0.25)
+	_art.add_child(shadow)
+
+	var stem := Line2D.new()
+	stem.points = PackedVector2Array([Vector2(0.0, -2.0), Vector2(0.0, -24.0)])
+	stem.width = 3.0
+	stem.default_color = Color(0.26, 0.53, 0.31, 1.0)
+	_art.add_child(stem)
+
+	for index: int in 5:
+		var angle := TAU * float(index) / 5.0
+		var center := Vector2(cos(angle), sin(angle)) * 9.0 + Vector2(0.0, -29.0)
+		var petal := Polygon2D.new()
+		petal.polygon = PackedVector2Array([
+			center + Vector2(-4.0, -3.0), center + Vector2(4.0, -3.0),
+			center + Vector2(6.0, 2.0), center + Vector2(0.0, 5.0), center + Vector2(-6.0, 2.0)
+		])
+		petal.color = petal_color
+		_art.add_child(petal)
+
+	var center_dot := Polygon2D.new()
+	var center_points := PackedVector2Array()
+	for index: int in 12:
+		var angle := TAU * float(index) / 12.0
+		center_points.append(Vector2(cos(angle), sin(angle)) * 4.0 + Vector2(0.0, -29.0))
+	center_dot.polygon = center_points
+	center_dot.color = Color(1.0, 0.81, 0.35, 1.0)
+	_art.add_child(center_dot)
+
+
+func _label_settings(font_size: int, font_color: Color) -> LabelSettings:
+	var settings := LabelSettings.new()
+	settings.font_size = font_size
+	settings.font_color = font_color
+	settings.outline_size = 3
+	settings.outline_color = Color(0.08, 0.11, 0.08, 0.94)
+	return settings

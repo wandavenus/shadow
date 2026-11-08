@@ -47,12 +47,14 @@ jobs:
         run: |
           set -euo pipefail
           required=(
-            "assets/characters/catalog-kenney/PNG/Round (outline)/rabbit.png"
-            "assets/characters/empty-presence-512.png"
-            "assets/environment/lorong-empty-room-1280x720.png"
-            "assets/props/catalog-furniture/Untitled 17.png"
-            "assets/share/favicon.png"
-            "assets/share/lorong-title-1280x720.png"
+            "assets/environment/desa-kampung-runtime-1280x720.png"
+            "assets/characters/desa-hewan/mika-fox-runtime-384x576.png"
+            "assets/characters/desa-hewan/pak-ranu-goat-runtime-384x576.png"
+            "assets/characters/desa-hewan/bu-sari-cat-runtime-384x576.png"
+            "assets/characters/desa-hewan/nara-rabbit-runtime-384x576.png"
+            "assets/characters/desa-hewan/pak-jati-bear-runtime-384x576.png"
+            "assets/characters/desa-hewan/lio-dog-runtime-384x576.png"
+            "assets/share/favicon-fox-runtime-256.png"
             "assets/template/fonts/Figtree-VF.subset.woff2"
             "assets/template/fonts/NotoSansSC-VF.subset.woff2"
             "assets/template/fonts/display/Sora-VF.subset.woff2"
@@ -87,11 +89,12 @@ jobs:
           log-accepted-android-sdk-licenses: false
           packages: >-
             platform-tools
-            build-tools;35.0.1
+            build-tools;36.0.0
             platforms;android-35
+            platforms;android-36
             cmdline-tools;latest
-            cmake;3.10.2.4988404
-            ndk;28.1.13356709
+            cmake;3.22.1
+            ndk;29.0.14206865
 
       - name: Siapkan Godot dan template ekspor
         uses: chickensoft-games/setup-godot@ac93246ea68518a384c1c280a496e5989341f2f6 # v2.4.3
@@ -105,8 +108,9 @@ jobs:
           set -euo pipefail
           sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-$HOME/.android/sdk}}"
           [[ -x "$sdk_root/platform-tools/adb" ]] || { echo "::error::Android SDK tidak ditemukan di $sdk_root"; exit 1; }
-          mkdir -p "$HOME/.config/godot"
-          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
+          settings_dir="${XDG_CONFIG_HOME:-$HOME/.config}/godot"
+          mkdir -p "$settings_dir"
+          cat > "$settings_dir/editor_settings-4.7.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
@@ -117,6 +121,14 @@ jobs:
           echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
           godot --headless --version
           java -version
+
+      - name: Impor resource dan jalankan regresi gameplay/audio
+        working-directory: games/lorong-sunyi
+        run: |
+          set -euo pipefail
+          godot --headless --editor --path . --quit
+          godot --headless --path . res://test/test_suite.tscn
+          godot --headless --path . --script res://test/atmosphere_audio_test.gd
 
       - name: Siapkan signing key APK rilis
         run: |
@@ -154,12 +166,6 @@ jobs:
             echo "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=$password"
           } >> "$GITHUB_ENV"
 
-      - name: Impor resource dan jalankan pemeriksaan Godot
-        working-directory: games/lorong-sunyi
-        run: |
-          set -euo pipefail
-          godot --headless --editor --path . --quit
-
       - name: Tetapkan versi build yang meningkat per run
         working-directory: games/lorong-sunyi
         run: |
@@ -193,15 +199,36 @@ jobs:
           if not android or 'platform="Android"' not in android.group(1):
               raise SystemExit("Preset Android Release tidak ditemukan atau platform-nya salah.")
           settings = options.group(1) if options else ""
-          if re.search(r"(?m)^gradle_build/(?:min_sdk|target_sdk)=", settings):
-              raise SystemExit("Min SDK/Target SDK override tidak boleh disetel saat Use Gradle Build dinonaktifkan.")
+          def option(name):
+              match = re.search(rf"(?m)^{re.escape(name)}=(.*)$", settings)
+              if not match:
+                  raise SystemExit(f"Opsi wajib tidak ditemukan: {name}")
+              return match.group(1).strip().strip('"')
+
+          if option("gradle_build/use_gradle_build") != "true":
+              raise SystemExit("Preset Android wajib mengaktifkan Gradle Build.")
+          if option("gradle_build/min_sdk") != "30":
+              raise SystemExit("Preset Android wajib menetapkan minSdk 30.")
+          if option("gradle_build/target_sdk") != "35":
+              raise SystemExit("Preset Android wajib menetapkan targetSdk 35.")
+          if option("gradle_build/export_format") != "0":
+              raise SystemExit("Preset Android wajib menghasilkan APK.")
+          expected_architectures = {
+              "architectures/arm64-v8a": "true",
+              "architectures/armeabi-v7a": "false",
+              "architectures/x86": "false",
+              "architectures/x86_64": "false",
+          }
+          for name, expected in expected_architectures.items():
+              if option(name) != expected:
+                  raise SystemExit(f"Arsitektur Android tidak sesuai: {name} harus {expected}.")
           if not re.search(r'(?m)^vram_texture_compression/for_mobile=true$', settings):
               raise SystemExit("Preset Android harus mengaktifkan vram_texture_compression/for_mobile.")
           if not re.search(r'(?m)^vram_texture_compression/for_desktop=false$', settings):
               raise SystemExit("Preset Android harus menonaktifkan kompresi desktop.")
           if not re.search(r'(?m)^textures/vram_compression/import_etc2_astc=true$', settings):
               raise SystemExit("Preset Android harus mengaktifkan ETC2/ASTC texture compression.")
-          print("Preset Android tervalidasi: SDK overrides tidak konflik dan ETC2/ASTC mobile aktif.")
+          print("Preset Android tervalidasi: Gradle, minSdk 30, targetSdk 35, APK, arm64-only, dan ETC2/ASTC.")
           PY
 
       - name: Ekspor APK dengan preset Android Release
@@ -210,9 +237,10 @@ jobs:
           set -euo pipefail
           mkdir -p build/android
           apk="$GITHUB_WORKSPACE/games/lorong-sunyi/build/android/Lorong-Sunyi-release.apk"
-          godot --headless --path . --export-release "Android Release" "$apk"
+          godot --headless --path . --install-android-build-template --export-release "Android Release" "$apk"
           test -s "$apk"
-          "$ANDROID_SDK_ROOT/build-tools/35.0.1/apksigner" verify --verbose "$apk"
+          python3 tools/verify_android_apk.py "$apk"
+          "$ANDROID_SDK_ROOT/build-tools/36.0.0/apksigner" verify --verbose "$apk"
 
       - name: Unggah APK sebagai artifact workflow
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

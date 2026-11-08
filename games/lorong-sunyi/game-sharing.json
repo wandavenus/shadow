@@ -1,15 +1,15 @@
 {
   "schemaVersion": 2,
   "title": "Lorong Sunyi",
-  "description": "Temani Mika, kelinci kecil, menyelidiki kamar yang berubah. Periksa benda, rangkai petunjuk, dan bersembunyi dari Kehadiran.",
+  "description": "Temani Mika si rubah menjelajahi desa yang tenang. Bantu warga mengantar sayur, sapa tetangga, dan ikuti perubahan waktu serta cuaca tanpa deadline.",
   "defaultCaptions": {
-    "x": "Mika terjebak di kamar yang terus berubah. Mampukah ia menemukan jalan keluar? — Lorong Sunyi",
-    "facebook": "Jelajahi kamar sunyi, periksa benda-benda di dalamnya, dan hindari sesuatu yang mengubah ruang. Coba prototipe Lorong Sunyi.",
-    "reddit": "Saya membuat prototipe horor psikologis 2.5D tentang kelinci kecil yang menyelidiki kamar yang berubah: Lorong Sunyi.",
-    "discord": "Ada sesuatu di balik pintu. Temani Mika menyelidiki Lorong Sunyi."
+    "x": "Jelajahi Desa Sela bersama Mika si rubah. Bantu warga, nikmati suasana yang berubah, lalu lanjutkan petualangan dengan bebas — Lorong Sunyi.",
+    "facebook": "Lorong Sunyi adalah slice-of-life 2.5D yang damai: bantu Pak Ranu dan Bu Sari, temui para tetangga, lalu jelajahi desa bersama Mika si rubah.",
+    "reddit": "Saya sedang membuat vertical slice slice-of-life 2.5D tentang Mika, rubah chibi full-body yang membantu warga desa melalui tugas-tugas kecil dan suasana waktu/cuaca yang berubah.",
+    "discord": "Sapa warga, bantu Pak Ranu dan Bu Sari, dan jelajahi desa dengan Mika si rubah—tanpa timer atau tekanan."
   },
   "assets": {
-    "og": "assets/share/lorong-sunyi-og-1200x630.png",
-    "favicon": "assets/share/favicon.png"
+    "og": "assets/share/lorong-sunyi-village-og-1280x720.png",
+    "favicon": "assets/share/favicon-fox-runtime-256.png"
   }
 }

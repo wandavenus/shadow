@@ -1,36 +1,27 @@
 # TODO — Lorong Sunyi
 
-## 1. Prototipe horor psikologis 2.5D Android
+## Selesai dan lolos pemeriksaan otomatis
+- [x] Mengalihkan loop dari horor ke slice-of-life desa yang damai: bantu warga, feedback sosial, lalu free exploration.
+- [x] Memakai latar runtime kampung low-fi 1280×720.
+- [x] Menyiapkan enam karakter humanoid-chibi full-body: Mika fox, Pak Ranu goat, Bu Sari cat, Nara rabbit, Pak Jati bear, Lio dog.
+- [x] Menambahkan ekor procedural dan animasi idle/walk; tidak ada kepala saja yang melayang.
+- [x] Membuat warga dapat diajak bicara, dengan quest utama, tugas opsional, dan finish hangat.
+- [x] Menjaga sapaan tetap netral; catatan cuaca, rutinitas warga, empat daypart/cuaca, pause, dan reduced-motion mengikuti state.
+- [x] Memeriksa keyboard/touch, prompt, name tag, status quest, serta eksplorasi bebas.
+- [x] Menuntaskan quest utama dan opsional pada seluruh 16 pasangan waktu/cuaca; satu rute quest utama lulus lewat input/target interaksi tanpa teleport.
+- [x] Menjalankan suite gameplay: 571 checks lulus.
+- [x] Menjalankan suite kontrak audio: 110 checks lulus.
+- [x] Menjalankan suite visual desa: 29 checks lulus.
+- [x] Menjalankan APK Debug Gradle lokal untuk memverifikasi manifest, ABI, serta aset/script utama di paket.
 
-- [x] “Buat game untuk Android, dengan gaya horror-psychology 2.5D dengan karakter hewan chibi.” Prototipe Godot memakai kontrol sentuh dan layout lanskap; APK belum dihasilkan—workflow rilis tersedia di bagian 5.
-- [x] “Sorot angle camera seperti suikoden 2”; komposisi oblique/isometrik dibuat orisinal tanpa menyalin aset, karakter, atau adegan Suikoden II.
-- [x] “Gunakan Godot” dengan implementasi 2D berlapis/pseudo-3D yang sesuai untuk perangkat Android.
-- [x] “Sertakan karakter hewan chibi, kontrol dan UI ramah sentuh Android, suasana horor psikologis tanpa gore eksplisit, serta sebuah area permainan/prototipe awal yang dapat dimainkan.”
+## Masih perlu dilakukan
+- [ ] Uji visual langsung pada 1280×720 untuk keterbacaan tiap name tag, animasi, dan jalur pada semua cuaca.
+- [ ] Uji kontrol touch, safe area, performa, dan skala UI di perangkat Android min SDK 30/arm64.
+- [ ] Playtest untuk polish dialog, rutinitas warga, keterbacaan tujuan, dan transisi free exploration.
+- [ ] Minta pemilik kerja visual/audio meninjau ambience akhir; file efek/audio paralel tidak diubah dalam pekerjaan core ini.
 
-## 2. Eksplorasi, seluruh prop, petunjuk, teka-teki, dan ancaman
-
-- [x] “Rancang loop gameplay yang padu dengan suasana: eksplorasi ruang yang sunyi dan berubah secara psikologis, investigasi petunjuk, memeriksa/menggunakan seluruh prop, memecahkan teka-teki lingkungan, serta menghindari ancaman yang mengubah persepsi dan tata ruang.”
-- [x] “Semua prop yang dapat dijangkau—termasuk bangku, lemari, laci, meja, lampu, pintu, dan benda lain—harus interaktif dengan respons visual/audio/teks yang bermakna.”
-- [x] “Gunakan sistem interaksi data-driven agar setiap prop dapat memberi deskripsi, keadaan, petunjuk, item atau efek atmosfernya sendiri.”
-- [x] Area prototipe dapat dijelajahi dengan jalur oblique/isometrik; ancaman mengubah persepsi dan tata ruang serta dapat dihindari dengan bersembunyi.
-- [x] Selidiki petunjuk dan item, pahami perubahan lingkungan, pecahkan teka-teki, dan buka jalan keluar.
-
-## 3. Kontrol, bahasa, dan batas suasana
-
-- [x] “Kendalikan karakter hewan chibi melalui kontrol serta UI ramah sentuh Android.”
-- [x] “Seluruh konten game menggunakan Bahasa Indonesia tanpa pemilih bahasa.”
-- [x] “Pertahankan horor psikologis tanpa gore eksplisit.”
-
-## 4. Proyek dan aset
-
-- [x] Integrasikan aset yang dibutuhkan ke scene; pertahankan provenance dan fakta lisensi katalog.
-- [x] Ganti identitas, splash/loading screen, artwork sharing, dan favicon bawaan agar konsisten dengan Lorong Sunyi.
-- [x] Simpan source proyek ke repo GitHub `wandavenus/shadow` di subfolder `games/lorong-sunyi` tanpa menimpa README, lisensi, atau konten repo yang sudah ada.
-- [x] Sertakan semua media game yang diperlukan langsung di repo publik; workflow Android tidak lagi membutuhkan URL arsip atau secret media.
-
-## 5. Build APK rilis melalui GitHub Actions
-
-- [x] Tambahkan preset `Android Release` dan workflow manual Godot 4.7.2 yang memakai `--export-release`, menandatangani APK, memverifikasi tanda tangan, dan mengunggah artifact Actions tanpa membuat GitHub Release atau mengunggah ke Play Store.
-- [x] Gunakan persetujuan lisensi Android SDK yang sudah diberikan; input workflow default-nya tercentang.
-- [x] Dukung signing key sementara per run tanpa secret; tiga secret signing key tetap hanya opsional untuk instalasi pembaruan tanpa uninstall.
-- [ ] Jalankan workflow pertama setelah perubahan media ini; belum ada APK yang dihasilkan.
+## Batas rilis
+- [x] Export preset memakai Gradle, `minSdk=30`, `targetSdk=35`, dan hanya ABI `arm64-v8a`.
+- [x] APK Debug lokal diverifikasi: `minSdk=30`, `targetSdk=35`, native library hanya `arm64-v8a`, dan aset/script utama ada di paket.
+- APK Debug memakai signing debug otomatis Godot; file sementara dihapus setelah pemeriksaan. Tidak ada release keystore, Release build, upload, atau publikasi.
+- Release workflow diperbarui tetapi tidak dijalankan.

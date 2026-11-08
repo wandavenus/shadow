@@ -1,126 +1,99 @@
 extends RefCounted
-class_name LorongPropCatalog
+class_name LorongVillageCatalog
 
-const PROPS := [
+const VILLAGERS := [
 	{
-		"id": "bangku",
-		"name": "Bangku",
-		"region": [400, 57, 18, 23],
-		"position": Vector2(300, 520),
-		"scale": 3.0,
-		"collision_radius": 22.0,
-		"action": "clue",
-		"clue_key": "bangku",
-		"clue_value": "4",
-		"description": "Bangku pendek dengan goresan baru di bawah dudukannya.",
-		"first_text": "Di bawah bangku tergores angka 4. Kayunya masih terasa hangat.",
-		"repeat_text": "Goresan angka 4 itu belum berubah. Serpihan kayu menempel di jarimu.",
-		"fear_on_first": 0.75
+		"id": "pak_ranu",
+		"name": "Pak Ranu",
+		"role": "petani",
+		"species": "goat",
+		"sprite": "pak-ranu-goat",
+		"tagline": "PETANI",
+		"position": Vector2(925.0, 420.0),
+		"routine_points": [Vector2(925.0, 420.0), Vector2(958.0, 438.0)],
+		"routine_speed": 14.0,
 	},
 	{
-		"id": "laci",
-		"name": "Laci meja",
-		"region": [512, 23, 50, 25],
-		"position": Vector2(450, 452),
-		"scale": 2.25,
-		"collision_radius": 25.0,
-		"action": "key",
-		"description": "Laci berat dengan satu tarikan yang masih bisa digerakkan.",
-		"first_text": "Laci seret terbuka. Sebuah kunci kecil terbungkus kain lembap.",
-		"repeat_text": "Laci itu sudah kosong. Kunci kecilnya ada padamu.",
-		"fear_on_first": 0.65
+		"id": "bu_sari",
+		"name": "Bu Sari",
+		"role": "pemilik kedai",
+		"species": "cat",
+		"sprite": "bu-sari-cat",
+		"tagline": "PEMILIK KEDAI",
+		"position": Vector2(250.0, 390.0),
+		"routine_points": [],
+		"routine_speed": 0.0,
 	},
 	{
-		"id": "lemari",
-		"name": "Lemari tua",
-		"region": [0, 10, 25, 38],
-		"open_region": [32, 10, 25, 38],
-		"position": Vector2(1035, 485),
-		"scale": 2.2,
-		"collision_radius": 27.0,
-		"action": "closet",
-		"description": "Lemari tinggi. Dari dalamnya terdengar kain bergesek.",
-		"first_text": "Kunci kecil berputar. Di balik mantel terselip angka 1.",
-		"repeat_text": "Pintu lemari terbuka sedikit. Ruang di dalamnya cukup untuk bersembunyi.",
-		"failure_text": "Gemboknya tidak bergerak. Kunci kecil mungkin cocok.",
-		"fear_on_first": 0.5
+		"id": "nara",
+		"name": "Nara",
+		"role": "tetangga pekebun",
+		"species": "rabbit",
+		"sprite": "nara-rabbit",
+		"tagline": "PEKEBUN",
+		"position": Vector2(720.0, 382.0),
+		"routine_points": [],
+		"routine_speed": 0.0,
 	},
 	{
-		"id": "meja",
-		"name": "Meja panjang",
-		"region": [48, 62, 44, 18],
-		"position": Vector2(675, 535),
-		"scale": 2.8,
-		"collision_radius": 31.0,
-		"action": "order",
-		"description": "Meja kosong dengan catatan terlipat di tepinya.",
-		"first_text": "Catatan: ‘Bangku. Lemari. Cahaya.’ Urutkan tanda-tandanya sesuai nama benda.",
-		"repeat_text": "Urutannya tetap sama: bangku, lemari, lalu cahaya.",
-		"fear_on_first": 0.4
+		"id": "pak_jati",
+		"name": "Pak Jati",
+		"role": "perajin anyaman",
+		"species": "bear",
+		"sprite": "pak-jati-bear",
+		"tagline": "PERAJIN ANYAMAN",
+		"position": Vector2(1010.0, 565.0),
+		"routine_points": [],
+		"routine_speed": 0.0,
 	},
 	{
-		"id": "lampu",
-		"name": "Lampu lantai",
-		"region": [224, 85, 16, 42],
-		"position": Vector2(910, 475),
-		"scale": 1.9,
-		"collision_radius": 18.0,
-		"action": "lamp",
-		"clue_key": "lampu",
-		"clue_value": "7",
-		"description": "Saklarnya longgar; cahaya mungkin mengubah apa yang terlihat.",
-		"first_text": "Lampu menyala. Di dinding, bayangan membentuk angka 7.",
-		"repeat_text": "Saklar lampu berbunyi pelan. Angka 7 tetap tertinggal di ingatanmu.",
-		"fear_on_first": 0.85
+		"id": "lio",
+		"name": "Lio",
+		"role": "anak tetangga",
+		"species": "dog",
+		"sprite": "lio-dog",
+		"tagline": "ANAK TETANGGA",
+		"position": Vector2(520.0, 555.0),
+		"routine_points": [Vector2(520.0, 555.0), Vector2(550.0, 542.0)],
+		"routine_speed": 18.0,
+	},
+]
+
+const WORLD_OBJECTS := [
+	{
+		"id": "keranjang_sayur",
+		"name": "Keranjang sayur",
+		"kind": "basket",
+		"position": Vector2(882.0, 495.0),
+		"color": Color(0.62, 0.37, 0.20, 1.0),
 	},
 	{
-		"id": "jam",
-		"name": "Jam bandul",
-		"region": [256, 88, 21, 40],
-		"position": Vector2(365, 330),
-		"scale": 1.65,
-		"collision_radius": 18.0,
-		"action": "examine",
-		"description": "Jam tua berhenti, tetapi bunyi detiknya belum hilang.",
-		"first_text": "Jam mati pada pukul 02:14. Detik terakhirnya masih terdengar.",
-		"repeat_text": "Jarumnya tidak bergerak. Bunyi detik itu datang dari arah lain.",
-		"fear_on_first": 0.25
+		"id": "bunga_kecil",
+		"name": "Bunga kecil",
+		"kind": "flower",
+		"position": Vector2(610.0, 510.0),
+		"color": Color(0.94, 0.72, 0.79, 1.0),
 	},
-	{
-		"id": "potret",
-		"name": "Potret tanpa wajah",
-		"region": [320, 96, 27, 25],
-		"position": Vector2(830, 330),
-		"scale": 1.9,
-		"collision_radius": 16.0,
-		"action": "examine",
-		"description": "Bingkai tua menampilkan sosok yang wajahnya tidak tergambar.",
-		"first_text": "Sosok dalam potret tidak punya wajah. Tatapannya tetap mengikutimu.",
-		"repeat_text": "Potret itu masih kosong. Sekarang bingkainya tampak sedikit miring.",
-		"fear_on_first": 0.45
-	},
-	{
-		"id": "pintu",
-		"name": "Pintu lorong",
-		"region": [240, 130, 32, 46],
-		"position": Vector2(640, 218),
-		"scale": 2.2,
-		"collision_radius": 0.0,
-		"action": "door",
-		"description": "Pintu tertutup menuju lorong yang seharusnya berada di balik dinding.",
-		"first_text": "Kunci angka tiga digit. Bangku, lemari, dan cahaya menyimpan urutannya.",
-		"repeat_text": "Pintu itu menunggu tiga angka dan urutan yang benar.",
-		"fear_on_first": 0.0
-	}
 ]
 
 
-static func all_props() -> Array:
-	return PROPS.duplicate(true)
+static func all_villagers() -> Array:
+	return VILLAGERS.duplicate(true)
 
 
-static func prop_ids() -> Array[String]:
+static func all_world_objects() -> Array:
+	return WORLD_OBJECTS.duplicate(true)
+
+
+static func villager_ids() -> Array[String]:
 	var result: Array[String] = []
-	for item: Dictionary in PROPS:
-		result.append(str(item.id))
+	for villager: Dictionary in VILLAGERS:
+		result.append(str(villager.id))
+	return result
+
+
+static func world_object_ids() -> Array[String]:
+	var result: Array[String] = []
+	for world_object: Dictionary in WORLD_OBJECTS:
+		result.append(str(world_object.id))
 	return result

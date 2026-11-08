@@ -12,7 +12,7 @@
   "tuning.gameplay.respawn_invulnerability": "Waktu aman setelah tersentuh",
   "tuning.gameplay.respawn_invulnerability.description": "Lama Mika kebal dari sentuhan kedua setelah berhasil melepaskan diri.",
   "tuning.player.move_speed": "Kecepatan berjalan Mika",
-  "tuning.player.move_speed.description": "Kecepatan gerak kelinci saat menjelajahi kamar.",
+  "tuning.player.move_speed.description": "Kecepatan gerak Mika si rubah saat menjelajahi desa.",
   "tuning.player.lives": "Kesempatan Mika",
   "tuning.player.lives.description": "Jumlah kesempatan sebelum jalan pulang tertutup.",
   "tuning.player.visual_scale": "Ukuran Mika",

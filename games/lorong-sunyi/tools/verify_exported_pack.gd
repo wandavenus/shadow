@@ -10,13 +10,14 @@ func _initialize() -> void:
 func _verify() -> void:
 	_check(ProjectSettings.get_setting("application/config/name") == "Lorong Sunyi", "identitas ekspor")
 	for path: String in [
-		"assets/environment/lorong-empty-room-1280x720.png",
-		"assets/characters/empty-presence-512.png",
-		"assets/characters/catalog-kenney/PNG/Round (outline)/rabbit.png",
-		"assets/props/catalog-furniture/Untitled 17.png",
-		"assets/share/lorong-title-1280x720.png",
-		"assets/share/lorong-sunyi-og-1200x630.png",
-		"assets/share/favicon.png",
+		"assets/environment/desa-kampung-runtime-1280x720.png",
+		"assets/characters/desa-hewan/mika-fox-runtime-384x576.png",
+		"assets/characters/desa-hewan/pak-ranu-goat-runtime-384x576.png",
+		"assets/characters/desa-hewan/bu-sari-cat-runtime-384x576.png",
+		"assets/characters/desa-hewan/nara-rabbit-runtime-384x576.png",
+		"assets/characters/desa-hewan/pak-jati-bear-runtime-384x576.png",
+		"assets/characters/desa-hewan/lio-dog-runtime-384x576.png",
+		"assets/share/favicon-fox-runtime-256.png",
 		"localization/id-ID.json",
 		"config/tuning.json",
 	]:
@@ -46,8 +47,24 @@ func _verify() -> void:
 		_check(not main.has_method("_open_tuning"), "panel developer tidak boleh muncul di release")
 		main.call("_start_game")
 		await process_frame
-		_check(main.get_node_or_null("RuangSunyi") != null, "pack harus memulai area permainan")
+		var room := main.get("_room") as Node2D
+		_check(room != null and room.name == "Village" and main.get_node_or_null("Village") == room, "pack harus memulai scene desa aktif")
 		_check(main.get_node_or_null("HUD/TouchControls/InteractButton") is Button, "kontrol sentuh harus dikemas")
+		if room != null:
+			var player := room.get("player") as CharacterBody2D
+			_check(player != null and player.get_node_or_null("CharacterVisual/BodySprite") is Sprite2D, "pack harus memuat Mika full-body")
+			var npc_nodes: Dictionary = room.get("_npc_nodes")
+			var pak_ranu := npc_nodes.get("pak_ranu") as Node2D
+			var body_sprite := pak_ranu.get_node_or_null("CharacterVisual/BodySprite") as Sprite2D if pak_ranu != null else null
+			_check(body_sprite != null, "pack harus memuat rig BodySprite warga")
+			if player != null and pak_ranu != null and body_sprite != null:
+				player.global_position = pak_ranu.global_position + Vector2(4000.0, 4000.0)
+				room.call("_update_interaction_prompt", true)
+				var base_scale := body_sprite.scale.x
+				player.global_position = pak_ranu.global_position
+				room.call("_update_interaction_prompt", true)
+				_check(str(room.call("snapshot_for_testing").get("focused_target_id", "")) == "pak_ranu", "pack harus memilih fokus NPC terdekat")
+				_check(body_sprite.scale.x > base_scale, "pack harus meng-zoom BodySprite saat NPC difokuskan")
 		main.call("_return_to_title")
 		await process_frame
 		root.get_node("AudioDirector").call("release_streams")

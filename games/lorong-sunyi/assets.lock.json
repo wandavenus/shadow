@@ -6,7 +6,7 @@
       "order": 0
     },
     "pelaku": {
-      "name": "Mika & Kehadiran",
+      "name": "Karakter desa",
       "order": 10
     },
     "ruang": {
@@ -30,7 +30,7 @@
       "size": 9004,
       "assetType": "image",
       "groupId": "pelaku",
-      "used": true
+      "used": false
     },
     "assets/characters/empty-presence-512.png": {
       "path": "/manus-storage/game/sha256/3a01a9bb7f6eaf1bc450d40a15b2c0222478c269a9cddeb091ddc333bdee0e8b.png",
@@ -38,7 +38,7 @@
       "size": 116392,
       "assetType": "image",
       "groupId": "pelaku",
-      "used": true
+      "used": false
     },
     "assets/characters/empty_presence.png": {
       "path": "/manus-storage/game/sha256/f162f2ab07e0e338bb2c0313cc9282203c1228d671784d457a2b2c7afda4dc37.png",
@@ -62,7 +62,7 @@
       "size": 1098489,
       "assetType": "image",
       "groupId": "ruang",
-      "used": true
+      "used": false
     },
     "assets/environment/lorong_empty_room.png": {
       "path": "/manus-storage/game/sha256/475a65a4a386a8fc05ddf7f03b685334d11f0864ccb804e57eab755d51467d63.png",
@@ -78,7 +78,7 @@
       "size": 18523,
       "assetType": "image",
       "groupId": "prop-interaktif",
-      "used": true
+      "used": false
     },
     "assets/share/favicon.png": {
       "path": "/manus-storage/game/sha256/29f5571becf94175e97938db596d6de2e6667bf8b3abb863b75c662a8d93d7ce.png",
@@ -86,7 +86,7 @@
       "size": 9772,
       "assetType": "image",
       "groupId": "identitas",
-      "used": true
+      "used": false
     },
     "assets/share/lorong-sunyi-og-1200x630.png": {
       "path": "/manus-storage/game/sha256/d79a291f87b06dbf36e934b3e99aa416ec73f8094fca476b2d54e425639c7a2e.png",
@@ -94,7 +94,7 @@
       "size": 889179,
       "assetType": "image",
       "groupId": "identitas",
-      "used": true
+      "used": false
     },
     "assets/share/lorong-sunyi-og.png": {
       "path": "/manus-storage/game/sha256/902c690d0027ec59529ae6fe9fbad8a105fbec047b3439c265bb7344beb33b49.png",
@@ -110,7 +110,7 @@
       "size": 1063206,
       "assetType": "image",
       "groupId": "identitas",
-      "used": true
+      "used": false
     },
     "assets/template/characters/runner.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/c88485773d6ff9361e036f37d8ac76fb77b8c3f7c041c3f52c8dd222adc8cc21/assets/characters/runner.png",
@@ -118,7 +118,7 @@
       "size": 68885,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/characters/sentinel.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/0d9fb751bca5507ba14f7090573e6605a94753390a9e7c53bf2f590f0a24918d/assets/characters/sentinel.png",
@@ -126,7 +126,7 @@
       "size": 64998,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/environment/backdrop.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/ec4ab7867e60fb483dd438459f587b478aac4c1e71ec4fe509ce74a18de34216/assets/environment/backdrop.png",
@@ -134,7 +134,7 @@
       "size": 971282,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/environment/foreground.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/4b6916024c69961fbfa7cdc929c68f547fea4561e61ebdb3405b3aba0efbd94d/assets/environment/foreground.png",
@@ -142,7 +142,7 @@
       "size": 58603,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/fonts/Figtree-VF.subset.woff2": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/25/game-template/game-generic/2026.09.25-typography-v1/b3976c5969c8b1afd81dc3e314b61d8ffe3f3f58cf40906443105d330e6e0bdf/assets/template/fonts/Figtree-VF.subset.woff2",
@@ -174,7 +174,7 @@
       "size": 50950,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/powerups/magnet.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/6e7354aa6510a462717218b09b9d784bb161b87878bff62ef4f2a9d03c053de7/assets/powerups/magnet.png",
@@ -182,7 +182,7 @@
       "size": 53724,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/powerups/overdrive.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/6a48a85886c0551c1af0df576b0225f0ec3ae86b326fd84fc614083fbfe2908b/assets/powerups/overdrive.png",
@@ -190,7 +190,7 @@
       "size": 37238,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/powerups/shield.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/8cebf0cf730ca35c8c8697192ef78121c926442328a0725e0bd3e31701d64f13/assets/powerups/shield.png",
@@ -198,7 +198,7 @@
       "size": 39659,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/powerups/slow_field.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/96874c000866b2e7503b40da73888afb918ae36e462f51488415157da52a8637/assets/powerups/slow_field.png",
@@ -206,7 +206,7 @@
       "size": 49145,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/ui/loading-background.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/25/game-template/game-generic/2026.09.25-typography-v1/16dde3061f4e60802f8f0d1a6b875e72b6add05192237b03fef1fd313968a13a/assets/template/ui/loading-background.png",
@@ -222,7 +222,7 @@
       "size": 115691,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     },
     "assets/template/ui/title_glass.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/8860db07768f093d4effea10b51431f76a1552d4bc7fd4e57757f189c51f0429/assets/ui/title_glass.png",
@@ -230,7 +230,7 @@
       "size": 155592,
       "assetType": "image",
       "groupId": "template",
-      "used": true
+      "used": false
     }
   }
 }
